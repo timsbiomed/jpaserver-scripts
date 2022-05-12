@@ -1,0 +1,13 @@
+lucene-*
+logs/
+
+loaders/*
+!loaders/*/load.sh
+
+loaders_off/*
+!loaders_off/*/load.sh
+
+hapi/*
+!hapi/*.yaml
+
+

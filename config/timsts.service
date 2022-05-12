@@ -1,0 +1,21 @@
+[Unit]
+Description=TIMS Terminology Server
+Requires=se-pg-compose.service
+After=se-pg-compose.service
+
+[Service]
+
+# https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=timsts
+
+WorkingDirectory=/opt/timsts
+TimeoutSec=120
+UMask=002
+
+ExecStartPre=/opt/timsts/bin/setup-db.sh
+ExecStart=/opt/timsts/bin/start-hapi.sh
+
+[Install]
+WantedBy=multi-user.target
