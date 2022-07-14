@@ -15,7 +15,7 @@ TimeoutSec=120
 UMask=002
 
 ExecStartPre=/opt/timsts/bin/setup-db.sh
-ExecStart=/opt/timsts/bin/start-hapi.sh
+ExecStart=/opt/timsts/config/start-hapi.sh
 
 [Install]
 WantedBy=multi-user.target
