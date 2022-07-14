@@ -21,17 +21,27 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
-	echo Skipping: "${DIR}/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
-	exit 0
-fi
+for f in $(find "$(cd ${DIR}; pwd)" -mindepth 1 -maxdepth 1 -type f -name "*.json" | sort); do
+	
+	if [ -f "${f}.loaded.txt" ] || [ -f "${f}.loading.txt" ] ; then
+		echo Already loaded/loading: $f
+		continue
+	fi
+	
+	echo loading: $f
+	
+	FILENAME=$(basename "$f")
+	RESOURCE=${FILENAME%%-*}
+	ID=${FILENAME#*-}
+	ID=${ID%.json}
+	
+	if curl -v -X PUT --header "Content-Type: application/fhir+json" \
+		--header "Prefer: return=OperationOutcome" \
+		--output "${f}.response.txt" \
+		-T "$f" \
+		"${HAPI_R4}/${RESOURCE}/$ID" > "${f}.loading.txt" 2>&1; then
+		
+		mv "${f}.loading.txt" "${f}.loaded.txt"
+	fi
 
-if "${DIR}/../../bin/hapi-cli.sh" \
-upload-terminology \
--d "${DIR}/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip" \
--v r4 \
--t "${HAPI_R4}" \
--u http://snomed.info/sct > "${DIR}/loading.txt" 2>&1; then
-	mv "${DIR}/loading.txt"  "${DIR}/loaded.txt"
-fi
-
+done

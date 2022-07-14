@@ -21,26 +21,18 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-for f in $(find "$(cd ${DIR}; pwd)" -mindepth 1 -maxdepth 1 -type f -name "*.json" | sort); do
-	
-	if [ -f "${f}.loaded" ] || [ -f "${f}.loading" ] ; then
-		echo Already loaded/loading: $f
-		continue
-	fi
-	
-	echo loading: $f
-	
-	FILENAME=$(basename "$f")
-	RESOURCE=${FILENAME%%-*}
-	ID=${FILENAME#*-}
-	ID=${ID%.json}
-	
-	if curl -v -X PUT --header "Content-Type: application/fhir+json" \
-		--header "Prefer: return=OperationOutcome" \
-		-T "$f" \
-		"${HAPI_R4}/${RESOURCE}/$ID" > "${f}.loading" 2>&1; then
-		
-		mv "${f}.loading" "${f}.loaded"
-	fi
+if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
+	echo Skipping: "${DIR}/icd10cm_tabular_2022.xml"
+	exit 0
+fi
 
-done
+if "${DIR}/../../bin/hapi-cli.sh" \
+upload-terminology \
+-d "${DIR}/icd10cm_tabular_2022.xml" \
+-v r4 \
+-t "${HAPI_R4}" \
+-u http://hl7.org/fhir/sid/icd-10-cm > "${DIR}/loading.txt" 2>&1; then
+	mv "${DIR}/loading.txt"  "${DIR}/loaded.txt"
+fi
+
+
