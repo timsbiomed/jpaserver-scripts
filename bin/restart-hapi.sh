@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#set -x
+set -x
 set -e
 set -u
 set -o pipefail
@@ -21,17 +21,11 @@ if [ -f "$DIR/.env-local" ]; then
 	source "$DIR/.env-local"
 fi
 
-for d in $(find "$(cd ${DIR}/../loaders; pwd)" -mindepth 1 -maxdepth 1 -type d | sort); do
-		
-	if [[  $d == *.off ]]; then
-		echo skipping loader: $d
-		continue
-	fi
-	
-	echo loading: $d
-	
-	if [ -f "${d}/load.sh" ]; then
-		"${d}/load.sh"
-	fi
-done
+
+echo Stopping systemd timsts.service ...
+systemctl stop timsts.service
+
+echo Starting systemd timsts.service ...
+systemctl start timsts.service
+
 

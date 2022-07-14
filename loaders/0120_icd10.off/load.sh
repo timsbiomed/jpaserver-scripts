@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+#set -x
 set -e
 set -u
 set -o pipefail
@@ -16,7 +16,15 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/source.sh"
+source "${DIR}/../../bin/.env"
+if [ -f "${DIR}/../../bin/.env-local" ]; then
+	source "${DIR}/../../bin/.env-local"
+fi
 
+"${DIR}/../../bin/hapi-cli.sh" \
+upload-terminology \
+-d "${DIR}/icd10cm_tabular_2022.xml" \
+-v r4 \
+-t "${HAPI_R4}" \
+-u http://hl7.org/fhir/sid/icd-10-cm
 
-exec java -jar "${DIR}/../hapi/hapi.jar" --spring.config.location="${DIR}/../hapi/"

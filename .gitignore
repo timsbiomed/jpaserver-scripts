@@ -1,7 +1,7 @@
 lucene-*
 logs/
 
-loaders/*
+loaders/*/*
 !loaders/*/load.sh
 
 loaders_off/*
@@ -10,4 +10,5 @@ loaders_off/*
 hapi/*
 !hapi/*.yaml
 
+bin/.env-local
 

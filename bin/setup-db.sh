@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# This script does any DB setup needed before starting HAPI
+# It can be called with $1 set to "move" to move the database and the index to start over.
+# $2 would be the suffix name to move the database and index to.
+# 
+
 set -x
 set -e
 set -u
@@ -16,7 +22,11 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/source.sh"
+if [ -f "$DIR/.env-local" ]; then
+	source "$DIR/.env-local"
+fi
+source "${DIR}/.env"
+
 
 if is_database timsts; then
 	echo timsts db already exists
