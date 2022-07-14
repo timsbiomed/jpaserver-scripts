@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+#set -x
 set -e
 set -u
 set -o pipefail
@@ -29,9 +29,18 @@ systemctl stop timsts.service
 echo Moving db and index to $RESET ...
 "${DIR}/setup-db.sh" move $RESET
 
+logrotate -f "${DIR}/../config/timsts-logrotate.conf"
+
 echo Starting systemd timsts.service ...
 systemctl start timsts.service
 
+
+for f in $(find "$(cd ${DIR}/../loaders; pwd)" -type f \( -name "*loading.txt" -o -name "*loaded.txt" \) | sort); do
+	echo Deleting: "$f"
+	rm "$f"
+done
+
+echo sleeping for 60 seconds
 sleep 60
 
 echo Loading content ...

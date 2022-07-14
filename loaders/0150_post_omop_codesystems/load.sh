@@ -21,10 +21,27 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-"${DIR}/../../bin/hapi-cli.sh" \
-upload-terminology \
-  -d "${DIR}/Loinc_2.72.zip" \
-  -v r4 \
-  -t "${HAPI_R4}" \
-  -u http://loinc.org
+for f in $(find "$(cd ${DIR}; pwd)" -mindepth 1 -maxdepth 1 -type f -name "*.json" | sort); do
+	
+	if [ -f "${f}.loaded.txt" ] || [ -f "${f}.loading.txt" ] ; then
+		echo Already loaded/loading: $f
+		continue
+	fi
+	
+	echo loading: $f
+	
+	FILENAME=$(basename "$f")
+	RESOURCE=${FILENAME%%-*}
+	ID=${FILENAME#*-}
+	ID=${ID%.json}
+	
+	if curl -v -X POST --header "Content-Type: application/fhir+json" \
+		--header "Prefer: return=OperationOutcome" \
+		--output "${f}.response.txt" \
+		-T "$f" \
+		"${HAPI_R4}/${RESOURCE}" > "${f}.loading.txt" 2>&1; then
+		
+		mv "${f}.loading.txt" "${f}.loaded.txt"
+	fi
 
+done

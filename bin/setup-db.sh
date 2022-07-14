@@ -5,7 +5,7 @@
 # $2 would be the suffix name to move the database and index to.
 # 
 
-set -x
+#set -x
 set -e
 set -u
 set -o pipefail

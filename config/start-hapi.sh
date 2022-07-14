@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+#set -x
 set -e
 set -u
 set -o pipefail
@@ -22,4 +22,4 @@ if [ -f "$DIR/../bin/.env-local" ]; then
 fi
 
 
-exec java -jar "${DIR}/../hapi/hapi.jar" --spring.config.location="${DIR}/../hapi/"
+exec java -Xmx10G -jar "${DIR}/../hapi/hapi.jar" --spring.config.location="${DIR}/../hapi/"
