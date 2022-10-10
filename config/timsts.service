@@ -17,5 +17,8 @@ UMask=002
 ExecStartPre=/opt/timsts/bin/setup-db.sh
 ExecStart=/opt/timsts/config/start-hapi.sh
 
+Restart=on-failure
+RestartSec=1s
+
 [Install]
 WantedBy=multi-user.target
