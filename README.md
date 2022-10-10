@@ -8,3 +8,24 @@ I'm on macos, which doesn't have systemd. My focus there is on the scripts
 that systemd would call. I'm using a Postgres app for example.
 
 Windows is another question.
+
+
+# DATA
+In the loaders directory are directoris for different vocabularies.
+Each has a load.sh and one or more datafiles. Other files are flags
+to the scripts so you don't load when you already have.
+
+The loaders tree contains the vocabulary files as well (not kept in git!)
+
+- 0000_post_template.off:
+- 0000_put_template.off:
+- 0100_snomed: SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip
+- 0110_loinc: Loinc_2.72.zip
+- 0120_icd10: icd10cm_tabular_2022.xml
+- 0130_omop_vocabularies_hapi_csv.off:  RxNorm.Extension_20220615_hapi_csv.zip
+- 0140_put_omop_codesystems: CodeSystem-CPT4-2021.Release.json
+- 0160_put_mondo: CodeSystem-mondo.json
+
+
+# Running locally on a Mac without the benefit of systemd or similar.
+- install and start a desktop postgres. Collect the environment variables: PG_HOST, PG_PORT
