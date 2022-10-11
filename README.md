@@ -28,4 +28,13 @@ The loaders tree contains the vocabulary files as well (not kept in git!)
 
 
 # Running locally on a Mac without the benefit of systemd or similar.
-- install and start a desktop postgres. Collect the environment variables: PG_HOST, PG_PORT
+- install and start a desktop postgres. 
+    - Collect the environment variables: PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD. Make them available to these scripts in PG_HOST, PG_PORT, and password in PG_POSTGRES
+- collect the data files above
+- collect some code and configs
+  - hapi.jar
+    - build a hapi-fhir-jpaserver-starter ROOT.war and copy it into the hapi directory. Either name it hapi.jar or create a symlink to that name. 
+  - application.yaml
+  - hapi-fhir-cli.jar 
+
+
