@@ -21,14 +21,17 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
+
+FILE="${DIR}/../../ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
+
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
-	echo Skipping: "${DIR}/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
+	echo Skipping: "$FILE"
 	exit 0
 fi
 
 if "${DIR}/../../bin/hapi-cli.sh" \
 upload-terminology \
--d "${DIR}/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip" \
+-d "$FILE" \
 -v r4 \
 -t "${HAPI_R4}" \
 -u http://snomed.info/sct > "${DIR}/loading.txt" 2>&1; then
