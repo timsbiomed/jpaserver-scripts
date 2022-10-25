@@ -9,8 +9,17 @@ that systemd would call. I'm using a Postgres app for example.
 
 Windows is another question.
 
+# INSTALL
+- the vocabularies are discussed below
+- the converters, (just fhir-owl so far) are downloaded as needed
+  by build scripts in the loaders directories
+- The HAPI-FHIR server is downloaded ???
+- install.sh here, downloads the HAPI cli code and scripts.
 
 # DATA
+Many vocabularies can be downloaded. Those that cannot are cached in a 
+directory ontology_cache.
+
 In the loaders directory are directoris for different vocabularies.
 Each has a load.sh and one or more datafiles. Other files are flags
 to the scripts so you don't load when you already have.
