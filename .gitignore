@@ -3,9 +3,11 @@ logs/
 
 loaders/*/*
 !loaders/*/load.sh
+!loaders/*/build.sh
 
 loaders_off/*
 !loaders_off/*/load.sh
+!loaders_off/*/build.sh
 
 hapi/*
 !hapi/*.yaml
