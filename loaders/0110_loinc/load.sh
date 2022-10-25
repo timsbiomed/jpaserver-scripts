@@ -21,14 +21,16 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
+FILE="${DIR}/../../ontology_cache/Loinc_2.72.zip"
+
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
-	echo Skipping: "${DIR}/Loinc_2.72.zip"
+	echo Skipping: "$FILE"
 	exit 0
 fi
 
 if "${DIR}/../../bin/hapi-cli.sh" \
 upload-terminology \
-  -d "${DIR}/Loinc_2.72.zip" \
+  -d "$FILE" \
   -v r4 \
   -t "${HAPI_R4}" \
   -u http://loinc.org > "${DIR}/loading.txt" 2>&1; then
