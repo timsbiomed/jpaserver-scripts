@@ -21,14 +21,16 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
+FILE="${DIR}/../../ontology_cache/icd10cm_tabular_2022.xml"
+
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
-	echo Skipping: "${DIR}/icd10cm_tabular_2022.xml"
+	echo Skipping: "$FILE"
 	exit 0
 fi
 
 if "${DIR}/../../bin/hapi-cli.sh" \
 upload-terminology \
--d "${DIR}/icd10cm_tabular_2022.xml" \
+-d "$FILE" \
 -v r4 \
 -t "${HAPI_R4}" \
 -u http://hl7.org/fhir/sid/icd-10-cm > "${DIR}/loading.txt" 2>&1; then
