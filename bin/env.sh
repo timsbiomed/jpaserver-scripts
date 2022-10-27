@@ -20,5 +20,4 @@ FROM pg_stat_activity
 WHERE pg_stat_activity.datname = 'timsts'
   AND pid <> pg_backend_pid();"
 }
-
-
+# updated
