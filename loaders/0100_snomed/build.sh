@@ -1,11 +1,4 @@
 #!/usr/bin/env bash
-#set -x
-set -e
-set -u
-set -o pipefail
-set -o noclobber
-#set -f # no globbing
-#shopt -s failglob # fail if glob doesn't expand
 
 # See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
 SOURCE="${BASH_SOURCE[0]}"
@@ -16,10 +9,9 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/../bin/.env"
-if [ -f "$DIR/../bin/.env-local" ]; then
-	source "$DIR/../bin/.env-local"
+cd $DIR
+$FILE="SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
+if [[ ! -e ../../ontology_cache/$FILE] ; then
+    echo "ERROR no file in ontology_cache. $FILE"
+    exit 1;
 fi
-
-
-exec java -Xmx10G -jar "${DIR}/../hapi/hapi.jar" --spring.config.location="${DIR}/../hapi/"

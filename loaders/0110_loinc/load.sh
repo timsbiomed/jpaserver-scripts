@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# load.sh for loinc
+# looks for file in the ontology cache, named Loinc_2.72.zip explicitly
+
 #set -x
 set -e
 set -u
@@ -16,12 +20,17 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/../../bin/.env"
+source "${DIR}/../../bin/env.sh"
 if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
 FILE="${DIR}/../../ontology_cache/Loinc_2.72.zip"
+FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
+if (( $FILE_SIZE < 10000 )) ; then
+    echo "input file is suspiciously small. try git lfs install, the git lfs pull Loinc_2.72.zip"
+    echo "(I'm thinking it's just a reference file and git-lfs needs to be installed and run to pull the real file down.)"
+fi
 
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
 	echo Skipping: "$FILE"

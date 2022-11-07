@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# load.sh for HPO
+# looks for  files named <resource>_<ontology>.json in this directory
+
+# Ex. CodeSystem-hpo.json
 #set -x
 set -e
 set -u
@@ -16,7 +21,7 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/../../bin/.env"
+source "${DIR}/../../bin/env.sh"
 if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi

@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-#set -x
-set -e
-set -u
-set -o pipefail
-set -o noclobber
-#set -f # no globbing
-#shopt -s failglob # fail if glob doesn't expand
+
+# get the CLI
 
 # See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
 SOURCE="${BASH_SOURCE[0]}"
@@ -16,10 +11,13 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/../bin/.env"
-if [ -f "$DIR/../bin/.env-local" ]; then
-	source "$DIR/../bin/.env-local"
+cd $DIR/../hapi
+
+FILE=hapi-fhir-cli
+if [[ ! -f $FILE ]] ;then
+    wget https://github.com/hapifhir/hapi-fhir/releases/download/v6.1.3/hapi-fhir-6.1.3-cli.zip
+    unzip hapi-fhir-6.1.3-cli.zip
+    rm hapi/hapi-fhir-6.1.3-cli.zip
+else
+    echo "INFO: hapi-fhir cli seems to be already installed."
 fi
-
-
-exec java -Xmx10G -jar "${DIR}/../hapi/hapi.jar" --spring.config.location="${DIR}/../hapi/"

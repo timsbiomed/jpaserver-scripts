@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-#set -x
-set -e
-set -u
-set -o pipefail
-set -o noclobber
-#set -f # no globbing
-#shopt -s failglob # fail if glob doesn't expand
+
+# dowload LOINC 2.72 (version is important, 2.73 breaks the HAPI LOINC loader as of 10/2022)
 
 # See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
 SOURCE="${BASH_SOURCE[0]}"
@@ -16,10 +11,9 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/../bin/.env"
-if [ -f "$DIR/../bin/.env-local" ]; then
-	source "$DIR/../bin/.env-local"
+cd $DIR
+FILE="Loinc_2.72.zip"
+if [[ ! -f ../../ontology_cache/$FILE ]] ; then
+    echo "ERROR no file in ontology_cache. $FILE"
+    exit 1;
 fi
-
-
-exec java -Xmx10G -jar "${DIR}/../hapi/hapi.jar" --spring.config.location="${DIR}/../hapi/"
