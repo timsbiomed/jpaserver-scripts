@@ -1,9 +1,28 @@
 #!/usr/bin/env bash
 
-# This script does any DB setup needed before starting HAPI
+# usage: setup-db.sh 
+# usage: setup-db.sh  <move> <suffix>
+
+# This script does any DB setup needed before starting HAPI. It basically
+# calls create_datbase in the .env file that calls postgres to create the
+# database timsts with a user of timsts.
 # It can be called with $1 set to "move" to move the database and the index to start over.
 # $2 would be the suffix name to move the database and index to.
 # 
+# functions used here are in .env
+#
+# REQUIRES environment variables:
+#export PG_HOST=20.119.216.32
+#export PG_PORT=5432
+#export PG_POSTGRES=XXXXXXx
+#
+# Postgres wants these:
+#export PGHOST=20.119.216.32
+#export PGPORT=5432
+#export PGDBATABASE=timsts
+#export PGUSER=timsts
+#export PGPASSWORD=XXXXXXx
+# https://www.postgresql.org/docs/current/libpq-envars.html
 
 #set -x
 set -e
