@@ -28,6 +28,11 @@ Steps:
 - start the server by running: docker compose up
   - or start the server by running config/start-hapi.sh to run directly on linux.
 - download, convert and load the data by running each of the scripts in the loaders directory.
+==> server should come up on port 8080
+
+How-to Tasks
+- modifying the application.yaml ?
+- modifying the server configuration (in applicatio.yaml???)
 
 
 TODO:
