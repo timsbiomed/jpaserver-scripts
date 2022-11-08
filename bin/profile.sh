@@ -1,4 +1,5 @@
-export HAPI_R4="http://localhost:8080/fhir"
+#export HAPI_R4="http://localhost:8080/fhir"
+export HAPI_R4="http://localhost:8088/fhir"
 
 
 # mac
