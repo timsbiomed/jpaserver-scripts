@@ -16,7 +16,7 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/../../bin/.env"
+source "${DIR}/../../bin/env.sh"
 if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
