@@ -8,6 +8,29 @@ I'm on macos, which doesn't have systemd. No attempt to address Windows here yet
 On mac, the plan is to use Docker on a -Pboot build ROOT.war. On mac, I tried to run the war
 directly, with either jetty or tomcat as servlet containers to no avail. 
 
+## TL;DR
+First off, install postgres if you want to use it. There's a step below where we have to decide between H2 and an install of postgres.
+in a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
+- git export <branch> > jpaserver-scripts.tar
+- copy that file to the machine or place you want to deploy on
+- make a directory for its contents: mkdir jpaserver-scripts; cd jpaserver-scripts
+- expand it: tar xvf ../jpaserver-scripts.tar
+- edit bin/profile.sh to have connection info to your postgres instance if you're doing that
+- edit hapi/application.yaml to set some things
+  - the port you want to run on. Look for "server: port:"
+  - connection info to your postgres instance if that's what you're using, or that you want H2
+    - there are two paragraphs under "datasource", one for H2, and one for postgres.
+    - If postgres, you'll use the info from a few bullets up.
+  - turn lucene indexing on if you want it, you probably do. Search for "enable fulltext search with lucene" and uncomment
+
+Then run these scripts.
+- bin/install.sh
+    - fetches the HAPI CLI and a ROOT.war of the server
+- config/start-hapi.sh
+    - starts the server
+- bin/loaders.sh
+    - downloads and loads the vocabularies ??
+
 ## Directories here:
 - bin
   - docker-compose.yaml for running the server from a Docker container.
@@ -55,6 +78,7 @@ directly, with either jetty or tomcat as servlet containers to no avail.
 
 
 ##TODO:
+- fhir-owl is throwing an error about a hex-binary converter when it does Mondo
 - lucene search doesn't work with this set of scripts yet TODO
 - reconcile env.sh and profile.sh
 - I have not tested the systemd integration
@@ -72,3 +96,6 @@ directly, with either jetty or tomcat as servlet containers to no avail.
   - ./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Ethnicity-unknown-version.json
   - ./timsts/loaders/0140_put_omop_codesystems/hold/ICD10CM-FY2022.code.descriptions.json
   - ./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Race.and.Ethnicity-unknown-version.json
+
+
+
