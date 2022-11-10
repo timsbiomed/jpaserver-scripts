@@ -36,7 +36,7 @@ fi
 
 # DOWNLOAD hapi-fhir-jpaserver-starter
 if [[ ! -f $DIR/../hapi/ROOT.war ]] ;then 
-     wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/Nov-09-2022/ROOT.war 2> /dev/null
+     wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v6.0.1/ROOT.war 2> /dev/null
      set +e
      set +o pipefail
        jar tvf ROOT.war | grep tomcat
