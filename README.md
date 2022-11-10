@@ -9,26 +9,27 @@ On mac, the plan is to use Docker on a -Pboot build ROOT.war. On mac, I tried to
 directly, with either jetty or tomcat as servlet containers to no avail. 
 
 ## TL;DR
-First off, install postgres if you want to use it. There's a step below where we have to decide between H2 and an install of postgres.
-in a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
-- git export <branch> > jpaserver-scripts.tar
-- copy that file to the machine or place you want to deploy on
-- make a directory for its contents: mkdir jpaserver-scripts; cd jpaserver-scripts
-- expand it: tar xvf ../jpaserver-scripts.tar
-- edit bin/profile.sh to have connection info to your postgres instance if you're doing that
-- edit hapi/application.yaml to set some things
-  - the port you want to run on. Look for "server: port:"
-  - connection info to your postgres instance if that's what you're using, or that you want H2
-    - there are two paragraphs under "datasource", one for H2, and one for postgres.
-    - If postgres, you'll use the info from a few bullets up.
-  - turn lucene indexing on if you want it, you probably do. Search for "enable fulltext search with lucene" and uncomment
-
-Then run these scripts.
-- bin/install.sh
+- First off, install postgres if you want to use it. There's a step below where we have to decide between H2 and an install of postgres.
+  - https://postgresapp.com/
+  - I haven't written instructions for any configuration you have to do after installing it. It might be set up pretty well and the application.yaml ile here defaults to what I have for my postgresapp on my mac. Create the database called hapifhir.
+- In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
+  - git export <branch> > jpaserver-scripts.tar
+  - copy that file to the machine or place you want to deploy on
+  - make a directory for its contents: mkdir jpaserver-scripts; cd jpaserver-scripts
+  - expand it: tar xvf ../jpaserver-scripts.tar
+  - edit bin/profile.sh to have connection info to your postgres instance if you're doing that
+  - edit hapi/application.yaml to set some things
+    - the port you want to run on. Look for "server: port:"
+    - connection info to your postgres instance if that's what you're using, or that you want H2
+      - there are two paragraphs under "datasource", one for H2, and one for postgres.
+      - If postgres, you'll use the info from a few bullets up.
+    - turn lucene indexing on if you want it, you probably do. Search for "enable fulltext search with lucene" and uncomment
+- Then run these scripts.
+  - bin/install.sh
     - fetches the HAPI CLI and a ROOT.war of the server
-- config/start-hapi.sh
+  - config/start-hapi.sh
     - starts the server
-- bin/loaders.sh
+  - bin/loaders.sh
     - downloads and loads the vocabularies ??
 
 ## Directories here:
@@ -83,6 +84,7 @@ Then run these scripts.
 - reconcile env.sh and profile.sh
 - I have not tested the systemd integration
 - Where is the input for the 0140 OMOP stuff? I've read the code about tearing apart the file name as a source of metadata for the possibly multiple input files, but I have no idea where they are. The server has some. I have no idea the provenance.
+- snappy enough on azuer?
   - ./timsts/loaders/0140_put_omop_codesystems/CodeSystem-CPT4-2021.Release.json
   - ./timsts/loaders/0140_put_omop_codesystems/hold/ICD10WHO-unknown-version.json
   - ./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Gender-unknown-version.json
