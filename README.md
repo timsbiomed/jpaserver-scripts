@@ -101,3 +101,10 @@ directly, with either jetty or tomcat as servlet containers to no avail.
 
 
 
+# get an application.yaml file from the downloaed release, to then modify with local database connection info
+# jar xvf ROOT.war WEB-INF/classes/application.yaml
+ 
+# and BTW, have a look at the top of the pom.xml in that ROOT.war to verify it's release version
+#  jar   xvf ROOT.war META-INF/maven/ca.uhn.hapi.fhir/hapi-fhir-jpaserver-starter/pom.xml
+
+Another useful trick to find where a server came up is: lsof -i -P -n
