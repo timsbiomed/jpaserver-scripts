@@ -11,7 +11,7 @@ directly, with either jetty or tomcat as servlet containers to no avail.
 ## TL;DR
 - First off, install postgres if you want to use it. There's a step below where we have to decide between H2 and an install of postgres.
   - https://postgresapp.com/
-  - I haven't written instructions for any configuration you have to do after installing it. It might be set up pretty well and the application.yaml ile here defaults to what I have for my postgresapp on my mac. Create the database called hapifhir.
+  - I haven't written instructions for any configuration you have to do after installing it. It might be set up pretty well and the application.yaml ile here defaults to what I have for my postgresapp on my mac. Create the database called hapifhir, not just a server, but a databse, with createdb.
 - In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
   - git export <branch> > jpaserver-scripts.tar
   - copy that file to the machine or place you want to deploy on

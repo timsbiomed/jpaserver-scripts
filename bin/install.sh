@@ -39,9 +39,7 @@ if [[ ! -f $DIR/../hapi/ROOT.war ]] ;then
 
      # lucene doesn't appear to work with 6.0. The application.yaml needs a different line, and that didn't make it happy either.
      #wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v6.0.1/ROOT.war 2> /dev/null
-
      wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v5.7.0/ROOT.war 2> /dev/null
-
      #wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v5.5.0/ROOT.war 2> /dev/null
 
      set +e
