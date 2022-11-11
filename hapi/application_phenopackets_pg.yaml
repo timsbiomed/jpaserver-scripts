@@ -42,7 +42,8 @@ spring:
   #      hibernate.cache.use_structured_entries: false
   #      hibernate.cache.use_minimal_puts: false
   ###    These settings will enable fulltext search with lucene
-      hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect # added DON"T HAVE THE JAR? what do we need this for?
+        # need hapi-fhir-jpaserver-starter 5.7, because 5.5 doesn't have this Dialect class:
+      hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect 
       hibernate.search.enabled: true
       hibernate.search.backend.type: lucene
       hibernate.search.backend.analysis.configurer: ca.uhn.fhir.jpa.search.HapiLuceneAnalysisConfigurer
