@@ -7,6 +7,9 @@
 # judging by the presence ot the line below, I guess this is meant for a 5.5 relase of the jpaserver
 #      hibernate.search.backend.analysis.configurer: ca.uhn.fhir.jpa.search.HapiLuceneAnalysisConfigurer
 
+server: 
+    port: 8001
+    address: 0.0.0.0
 spring:
   main:
     allow-circular-references: true
