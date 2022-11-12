@@ -60,6 +60,11 @@ else
     echo "INFO: hapi-fhir-jpaserver-starter ROOT.war seems to be already installed."
 fi
 
+# CREATE LINK TO application.yaml
+if [[ ! -f $DIR/../hapi/application.yaml ]] ;then 
+    ln -s application_phenotype_pg.yaml application.yaml
+fi
+
 
 # DOWNLOAD fhir-owl 
 if [[ !  -f $DIR/../lib/fhir-owl-1.1.0.jar ]] ; then

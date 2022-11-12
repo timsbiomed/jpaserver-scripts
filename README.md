@@ -19,12 +19,12 @@ directly, with either jetty or tomcat as servlet containers to no avail.
   - expand it: tar xvf ../jpaserver-scripts.tar
   - edit bin/profile.sh to have connection info to your postgres instance if you're doing that
   - edit hapi/application.yaml to set some things
-    - the port you want to run on. Look for "server: port:"
+    - the port you want to run on. Look for "server: port:" (not tester?)
     - connection info to your postgres instance if that's what you're using, or that you want H2
       - there are two paragraphs under "datasource", one for H2, and one for postgres.
       - If postgres, you'll use the info from a few bullets up.
     - turn lucene indexing on if you want it, you probably do. Search for "enable fulltext search with lucene" and uncomment
-- Then run these scripts.
+- ** Then run these scripts. **
   - bin/install.sh
     - fetches the HAPI CLI and a ROOT.war of the server
   - config/start-hapi.sh
@@ -76,15 +76,19 @@ directly, with either jetty or tomcat as servlet containers to no avail.
     - mvn clean package spring-boot:repackage -Pboot && java -jar target/ROOT.war
     - It's crazy because just the "mvn package" command builds both ROOT.war and ROOT.war.original, making it look like some kind of repackaging is ogoing on. There may be, but it's not sufficient.
 - database errors may have to do with the local postrgres server not being up, or the environment variables not being set right
+- server port can be tricky. 
+  - it defaults to 8080, and is set by the server port field, but should not conflict (AFAICT) with the port in the tester paragraph.
+  - Of course it should also not conflict with other servers, hapi (often 8080), jupyter (8888), or otherwise.
+- Postgres requires a dialect class and that class must be available in the build of the ROOT.war you use.
 
 
 ##TODO:
+- What is the Terminology block you see at the bottom of some application.yaml files? see the app.6.yaml file
 - fhir-owl is throwing an error about a hex-binary converter when it does Mondo
-- lucene search doesn't work with this set of scripts yet TODO
 - reconcile env.sh and profile.sh
 - I have not tested the systemd integration
-- Where is the input for the 0140 OMOP stuff? I've read the code about tearing apart the file name as a source of metadata for the possibly multiple input files, but I have no idea where they are. The server has some. I have no idea the provenance.
 - snappy enough on azuer?
+- Where is the input for the 0140 OMOP stuff? I've read the code about tearing apart the file name as a source of metadata for the possibly multiple input files, but I have no idea where they are. The server has some. I have no idea the provenance.
   - ./timsts/loaders/0140_put_omop_codesystems/CodeSystem-CPT4-2021.Release.json
   - ./timsts/loaders/0140_put_omop_codesystems/hold/ICD10WHO-unknown-version.json
   - ./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Gender-unknown-version.json
@@ -100,11 +104,11 @@ directly, with either jetty or tomcat as servlet containers to no avail.
   - ./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Race.and.Ethnicity-unknown-version.json
 
 
-
-# get an application.yaml file from the downloaed release, to then modify with local database connection info
-# jar xvf ROOT.war WEB-INF/classes/application.yaml
- 
-# and BTW, have a look at the top of the pom.xml in that ROOT.war to verify it's release version
-#  jar   xvf ROOT.war META-INF/maven/ca.uhn.hapi.fhir/hapi-fhir-jpaserver-starter/pom.xml
-
-Another useful trick to find where a server came up is: lsof -i -P -n
+## NOTES:
+- get an application.yaml file from the downloaed release, to then modify with local database connection info
+  - jar xvf ROOT.war WEB-INF/classes/application.yaml
+- and BTW, have a look at the top of the pom.xml in that ROOT.war to verify it's release version
+  -  jar   xvf ROOT.war META-INF/maven/ca.uhn.hapi.fhir/hapi-fhir-jpaserver-starter/pom.xml
+- Another useful trick to find where a server came up is: lsof -i -P -n
+    - better is to use ps -aef | grep java to find the pid of the server, then
+    - lsof -i -P -n | grep <pid>
