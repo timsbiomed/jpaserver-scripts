@@ -9,9 +9,11 @@ On mac, the plan is to use Docker on a -Pboot build ROOT.war. On mac, I tried to
 directly, with either jetty or tomcat as servlet containers to no avail. 
 
 ## TL;DR
-- First off, install postgres if you want to use it. There's a step below where we have to decide between H2 and an install of postgres.
+- First off, install postgres if you want to use it. There's a step below where we have to decide between H2 and an install of postgres, and postgres as installed by postgresapp or how it's running on the azure server.
   - https://postgresapp.com/
   - I haven't written instructions for any configuration you have to do after installing it. It might be set up pretty well and the application.yaml ile here defaults to what I have for my postgresapp on my mac. Create the database called hapifhir, not just a server, but a databse, with createdb.
+- if you haven't before, git lfs install, for the big files in the ontology cache. You'll know you need it, if they are ridiculously small.
+  - if you've already cloned the repo, the files in ontology_cache will be too small. Re-download each with git lfs pull <file>
 - In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
   - git export <branch> > jpaserver-scripts.tar
   - copy that file to the machine or place you want to deploy on
@@ -27,6 +29,7 @@ directly, with either jetty or tomcat as servlet containers to no avail.
 - ** Then run these scripts. **
   - bin/install.sh
     - fetches the HAPI CLI and a ROOT.war of the server
+  - source profile.sh
   - config/start-hapi.sh
     - starts the server
   - bin/loaders.sh
@@ -44,18 +47,10 @@ directly, with either jetty or tomcat as servlet containers to no avail.
 - hapi Contains the Hapi CLI and related files, as well as the jpaserver-starter ROOT.war and application.yaml
 
 
-##Steps:
-- Running from Docker includes Postgres. Running directly requires it. Use the desktop version and note names of the db etc you create.
-  - for non-Docker update the profile.sh file with you values for postgres.
-- if you haven't before, git lfs install, for the big files in the ontology cache. You'll know you need it, if they are ridiculously small.
-  - if you've already cloned the repo, the files in ontology_cache will be too small. Re-download each with git lfs pull <file>
-- cd bin
-- run install.sh to get the CLI and the server
-- source profile.sh  to pick up environment variables that start with PG_ that mirror the PG variables from postgres that don't have underscores.
-    - These are used in the application.yaml. I'm not sure why they are different. This may change.
-- start the serverby running config/start-hapi.sh
-  - ==> server should come up on port 8080
-- download, convert and load the data by running each of the scripts in the loaders directory. The script bin/loaders.sh does this.
+## Database
+- H2 is configued in the application.yaml. Comment out lines mentioning postgres and uncomment the H2 ones.
+- Postgres also is turned on/off inthe application.yaml. It also requires environment variables in profile.sh to be set accordingly. 
+  - versions for mac local and JHU Azure are in there.
 
 ##How-to Tasks
 - modifying the application.yaml ?
