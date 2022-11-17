@@ -27,4 +27,5 @@ if (( $? )) ; then
 fi
 
 # RUN
-exec java -Xmx10G -jar "${DIR}/../hapi/ROOT.war" --spring.config.location="${DIR}/../hapi/"
+exec java -Xmx10G -jar "${DIR}/../hapi/ROOT.war" --spring.config.location="${DIR}/../hapi/" >> ${DIR}/../hapi.log &
+
