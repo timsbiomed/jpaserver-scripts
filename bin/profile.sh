@@ -1,6 +1,8 @@
 #export HAPI_R4="http://localhost:8080/fhir"
 #export HAPI_R4="http://localhost:8088/fhir"
-export HAPI_R4="http://localhost:8000/fhir"
+
+export HAPI_R4="http://localhost:8001/fhir"
+    # trying not to interfere with "tester" paragraph in application.yaml set to 8000
 
 
 # mac
@@ -27,6 +29,7 @@ export PGPASSWORD=it_matters_not
 #export PGUSER=timsts
 #export PGPASSWORD=timsts
 
+# these variables are used by some of the application.yaml files
 export PG_HOST=$PGHOST
 export PG_PORT=$PGPORT
 export PG_DATABASE=$PGDATABASE

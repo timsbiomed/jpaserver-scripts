@@ -22,9 +22,9 @@ spring:
     #max-active: 15
 
     # PostgreSQL URL connection, uncomment and set url line
-    url: 'jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DB}'
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
+    url: 'jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}'
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
     driverClassName: org.postgresql.Driver
 
     # database connection pool size
@@ -151,7 +151,7 @@ hapi:
     tester:
       home:
         name: Local Tester
-        server_address: 'http://localhost:8000/fhir'
+        server_address: 'http://localhost:8081/fhir'
         refuse_to_fetch_third_party_urls: false
         fhir_version: R4
       global:
