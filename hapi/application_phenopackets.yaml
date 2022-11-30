@@ -1,67 +1,39 @@
-logging:
-  level:
-    ROOT: INFO
-server:
-  port: 8000
-  address: 0.0.0.0
 spring:
-  servlet:
-    multipart:
-      max-file-size: 1GB
-      max-request-size: 1GB
-    contextPath: /
-  main:
-    allow-circular-references: true
-    #allow-bean-definition-overriding: true
-  flyway:
-    enabled: false
-    check-location: false
-    baselineOnMigrate: true
   datasource:
-    #url: 'jdbc:h2:file:./hapi-data/h2'
-    #url: jdbc:h2:mem:hapi_data
-    #username: sa
-    #password: null
-    #driverClassName: org.h2.Driver
+    url: 'jdbc:h2:file:./target/database/h2'
+    #url: jdbc:h2:mem:test_mem
+    username: sa
+    password: null
+    driverClassName: org.h2.Driver
     max-active: 15
-
-    # PostgreSQL URL connection, uncomment and set url line
-    url: 'jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DB}'
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
-    driverClassName: org.postgresql.Driver
 
     # database connection pool size
     hikari:
       maximum-pool-size: 10
-      connectionTimeout: 240000
-      leakDetectionThreshold: 2400000
+  flyway:
+    check-location: false
+    baselineOnMigrate: true
   jpa:
     properties:
       hibernate.format_sql: false
       hibernate.show_sql: false
-      #Hibernate dialect is automatically detected except Postgres and H2.
-      #If using H2, then supply the value of ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
-      #If using postgres, then supply the value of ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect
-      hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect
-  #    hibernate.hbm2ddl.auto: update
+  #      hibernate.dialect: org.hibernate.dialect.h2dialect
+  #      hibernate.hbm2ddl.auto: update
   #      hibernate.jdbc.batch_size: 20
   #      hibernate.cache.use_query_cache: false
   #      hibernate.cache.use_second_level_cache: false
   #      hibernate.cache.use_structured_entries: false
-  #      hibernate.cache.use_minimal_puts: falsea
+  #      hibernate.cache.use_minimal_puts: false
   ###    These settings will enable fulltext search with lucene
       hibernate.search.enabled: true
       hibernate.search.backend.type: lucene
       hibernate.search.backend.analysis.configurer: ca.uhn.fhir.jpa.search.HapiLuceneAnalysisConfigurer
       hibernate.search.backend.directory.type: local-filesystem
-      hibernate.search.backend.directory.root: ./lucene-index
+      hibernate.search.backend.directory.root: target/lucenefiles
       hibernate.search.backend.lucene_version: lucene_current
   batch:
     job:
       enabled: false
-    jdbc:
-      initialize-schema: never
 hapi:
   fhir:
     ### This enables the swagger-ui at /fhir/swagger-ui/index.html as well as the /fhir/api-docs (see https://hapifhir.io/hapi-fhir/docs/server_plain/openapi.html)
@@ -88,6 +60,17 @@ hapi:
     #        url: https://build.fhir.org/ig/HL7/fhir-ips/package.tgz
     #        name: hl7.fhir.uv.ips
     #        version: 1.0.0
+    implementationguides:
+      phenopackets:
+        url: http://phenopackets.org/core-ig/package.tgz
+        name: hl7.fhir.us.ga4gh.phenopacket
+# CHRIS        version: 0.1.1
+        version: 0.1.0
+#      genomics-reporting:
+#        url: http://hl7.org/fhir/uv/genomics-reporting/package.tgz
+#        name: hl7.fhir.uv.genomics-reporting
+#        version: 1.0.0
+
     #    supported_resource_types:
     #      - Patient
     #      - Observation
@@ -105,8 +88,6 @@ hapi:
     #    enable_repository_validating_interceptor: false
     #    enable_index_missing_fields: false
     #    enable_index_contained_resource: false
-    #    advanced_lucene_indexing: false
-    #advanced_lucene_indexing: true
     #    enforce_referential_integrity_on_delete: false
     #    enforce_referential_integrity_on_write: false
     #    etag_support_enabled: true
@@ -118,9 +99,6 @@ hapi:
     #    graphql_enabled: true
     #    narrative_enabled: true
     #    mdm_enabled: true
-    #    local_base_urls:
-    #      - https://hapi.fhir.org/baseR4
-    #mdm_enabled: true
     #    partitioning:
     #      allow_references_across_partitions: false
     #      partitioning_include_in_search_hashes: false
@@ -134,10 +112,6 @@ hapi:
     search-coord-core-pool-size: 20
     search-coord-max-pool-size: 100
     search-coord-queue-capacity: 200
-
-    # Threadpool size for BATCH'ed GETs in a bundle.
-    #    bundle_batch_pool_size: 10
-    #    bundle_batch_pool_max_size: 50
 
     #    logger:
     #      error_format: 'ERROR - ${requestVerb} ${requestUrl}'
@@ -155,7 +129,7 @@ hapi:
     tester:
       home:
         name: Local Tester
-        server_address: 'http://localhost:8080/fhir'
+        server_address: 'http://localhost:8000/fhir'
         refuse_to_fetch_third_party_urls: false
         fhir_version: R4
       global:
@@ -163,9 +137,9 @@ hapi:
         server_address: "http://hapi.fhir.org/baseR4"
         refuse_to_fetch_third_party_urls: false
         fhir_version: R4
-#    validation:
-#      requests_enabled: true
-#      responses_enabled: true
+    validation:
+      requests_enabled: false
+      responses_enabled: false
 #    binary_storage_enabled: true
 #    bulk_export_enabled: true
 #    subscription:
@@ -182,7 +156,6 @@ hapi:
 #        startTlsRequired:
 #        quitWait:
 #    lastn_enabled: true
-#    store_resource_in_lucene_index_enabled: true
 ###  This is configuration for normalized quantity serach level default is 0
 ###   0: NORMALIZED_QUANTITY_SEARCH_NOT_SUPPORTED - default
 ###   1: NORMALIZED_QUANTITY_STORAGE_SUPPORTED
@@ -199,27 +172,3 @@ hapi:
 #  protocol: 'http'
 #  schema_management_strategy: CREATE
 #  username: SomeUsername
-
-terminology:
-  enable_terminology: true
-  server_conformance_cache_milliseconds: 30000
-  terminology_conformance_cache_milliseconds: 30000
-
-  enable_auth: false
-  # https://docs.spring.io/spring-security/reference/servlet/authorization/expression-based.html
-  enabled_access: isAuthenticated()
-  disabled_access: permitAll
-
-  write_user: writer
-  write_password: writer
-  write_role: WRITER
-
-  read_user: reader
-  read_password: reader
-  read_role: READER
-
-  lucene_max_clause: 10000
-
-  server_base_url: http://20.119.216.32:8000
-  fhir_context_path: /r4
-  tester_context_path: /tester

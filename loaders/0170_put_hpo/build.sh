@@ -19,17 +19,15 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-# get fhir-owl to convert
-if [[ !  -f $DIR/../../lib/fhir-owl-1.1.0.jar ]] ; then
-    wget https://github.com/HOT-Ecosystem/fhir-owl/releases/download/Oct_24_2022/fhir-owl-1.1.0.jar
-    mv fhir-owl-1.1.0.jar $DIR/../../lib
-fi
 
 
 # get hpo
 if [[ !  -f hp.owl ]] ; then
-    wget https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl
+    echo "getting HPO"
+    wget -q https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl 2> /dev/null
     #wget https://github.com/obophenotype/human-phenotype-ontology/archive/refs/tags/v2022-06-11.tar.gz
+else
+    echo "HPO file found"
 fi
 
 # includes bits of CHEBI etc, file is about 2x in size.

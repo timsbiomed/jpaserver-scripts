@@ -16,22 +16,34 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "${DIR}/.env"
+
+source $DIR/../bin/profile.sh
+
+
+source "${DIR}/env.sh"
 if [ -f "$DIR/.env-local" ]; then
 	source "$DIR/.env-local"
 fi
 
-for d in $(find "$(cd ${DIR}/../loaders; pwd)" -mindepth 1 -maxdepth 1 -type d | sort); do
-		
+#for d in $(find "$(cd ${DIR}/../loaders; pwd)" -mindepth 1 -maxdepth 1 -type d | sort); do
+# is order really important?
+
+for d in $DIR/../loaders/* ; do
+  if [[ -d $d ]] ; then		
 	if [[  $d == *.off ]]; then
 		echo skipping loader: $d
 		continue
 	fi
 	
-	echo loading: $d
+	if [ -f "${d}/build.sh" ]; then
+	    echo building: $d
+		"${d}/build.sh"
+	fi
 	
 	if [ -f "${d}/load.sh" ]; then
+	    echo loading: $d
 		"${d}/load.sh"
 	fi
+  fi
 done
 
