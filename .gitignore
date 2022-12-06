@@ -1,5 +1,6 @@
-lucene-*
+.idea/
 logs/
+lucene-*
 
 loaders/*/*
 !loaders/*/load.sh
@@ -13,4 +14,3 @@ hapi/*
 !hapi/*.yaml
 
 bin/.env-local
-
