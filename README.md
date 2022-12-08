@@ -1,5 +1,6 @@
 # jpaserver-scripts (private)
 scripts to start and config the hapi-fhir-jpaserver-starter
+- assumes a companion repo, ontology_cache is in the same directory as this repo.
 
 This is a **private** repo so we don't have to sweat leaving passwords or data in here.
 
@@ -30,7 +31,7 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
   - $ git lfs install
   - if you've already cloned the repo, the files in ontology_cache will be too small. Re-download each with 
     - $ git lfs pull <file>
-  - The point of the ontology_cache directory is to cache, not to definitively store, vocabularies that aren't easily cURLed from the 'net.
+  - The point of the ontology_cache ~directory~ repository is to cache, not to definitively store, vocabularies that aren't easily cURLed from the 'net.
 - Export scripts and configure .  In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
   - $ git export <branch> > jpaserver-scripts.tar  WHICH BRANCH??? (main)
   - copy that file to the machine or place you want to deploy on
@@ -73,7 +74,7 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
 - bin
   - env.sh and profile.sh for setting up functions and variables in the environment. env.sh is sourced by the scripts, and profile.sh is stuff that should be in users' ~/.bash_profile or similar. 
   - install.sh downloads the HAPI CLI.
-- ontology_cache Configured with git lfs for large files, has the files that need a login to download: Snomed, Loinc and ICD.
+- ontology_cache  (repository assumed to be parallel to this one) Configured with git lfs for large files, has the files that need a login to download: Snomed, Loinc and ICD.
 - loaders Contains build.sh scripts to convert OWL to FHIR, and load.sh to load to the FHIR server. Some vocabularies have build.sh scripts that do basically nothing because the HAPI CLI can handle the files as the come. They exist for consistency only.
 - config This is for the systemd scripts, that haven't been tested recently.
 - hapi Contains the Hapi CLI and related files, as well as the jpaserver-starter ROOT.war and application.yaml

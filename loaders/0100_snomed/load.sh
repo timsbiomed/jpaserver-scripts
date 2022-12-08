@@ -27,7 +27,7 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 fi
 
 
-FILE="${DIR}/../../ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
+FILE="${DIR}/../../../ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
 
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
 	echo Skipping: "$FILE"

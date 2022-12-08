@@ -13,7 +13,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $DIR
 FILE="Loinc_2.72.zip"
-if [[ ! -f ../../ontology_cache/$FILE ]] ; then
+if [[ ! -f ../../../ontology_cache/$FILE ]] ; then
     echo "ERROR no file in ontology_cache. $FILE"
     exit 1;
 fi

@@ -25,7 +25,7 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-FILE="${DIR}/../../ontology_cache/Loinc_2.72.zip"
+FILE="${DIR}/../../../ontology_cache/Loinc_2.72.zip"
 FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
 if (( $FILE_SIZE < 10000 )) ; then
     echo "input file is suspiciously small. try git lfs install, the git lfs pull Loinc_2.72.zip"
