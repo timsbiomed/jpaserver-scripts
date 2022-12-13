@@ -1,4 +1,4 @@
-# jpaserver-scripts (private)
+# jpaserver-scripts (public)
 scripts to start and config the hapi-fhir-jpaserver-starter
 - assumes a companion repo, ontology_cache is in the same directory as this repo.
 
