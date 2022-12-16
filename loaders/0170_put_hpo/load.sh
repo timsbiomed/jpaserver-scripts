@@ -26,27 +26,20 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-for f in $(find "$(cd ${DIR}; pwd)" -mindepth 1 -maxdepth 1 -type f -name "*.json" | sort); do
+f=hp-CodeSystem.json
 	
-	if [ -f "${f}.loaded.txt" ] || [ -f "${f}.loading.txt" ] ; then
-		echo Already loaded/loading: $f
-		continue
-	fi
+if [ -f "$DIR/${f}.loaded.txt" ] || [ -f "$DIR/${f}.loading.txt" ] ; then
+	echo Already loaded/loading: $f
+fi
 	
-	echo loading: $f
+echo loading: $f
 	
-	FILENAME=$(basename "$f")
-	RESOURCE=${FILENAME%%-*}
-	ID=${FILENAME#*-}
-	ID=${ID%.json}
+if curl -v -X PUT --header "Content-Type: application/fhir+json" \
+	--header "Prefer: return=OperationOutcome" \
+	--output "$DIR/${f}.response.txt" \
+	-T "$DIR/$f" \
+	"${HAPI_R4}/CodeSystem/hpo" > "$DIR/${f}.loading.txt" 2>&1; then
 	
-	if curl -v -X PUT --header "Content-Type: application/fhir+json" \
-		--header "Prefer: return=OperationOutcome" \
-		--output "${f}.response.txt" \
-		-T "$f" \
-		"${HAPI_R4}/${RESOURCE}/$ID" > "${f}.loading.txt" 2>&1; then
-		
-		mv "${f}.loading.txt" "${f}.loaded.txt"
-	fi
+	mv "$DIR/${f}.loading.txt" "$DIR/${f}.loaded.txt"
+fi
 
-done

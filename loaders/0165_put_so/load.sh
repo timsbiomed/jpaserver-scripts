@@ -20,22 +20,19 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 fi
 
 FILE="so_CodeSystem.json"
-ID
 	
 if [ -f "$DIR/${FILE}.loaded.txt" ] || [ -f "$DIR/${FILE}.loading.txt" ] ; then
 	echo Already loaded/loading: $FILE
-	continue
 fi
 	
 echo loading: $FILE
 	
-	if curl -v -X PUT --header "Content-Type: application/fhir+json" \
-		--header "Prefer: return=OperationOutcome" \
-		--output "$DIR/${FILE}.response.txt" \
-		-T "$DIR/$FILE" \
-		"${HAPI_R4}/CodeSystem/$ID" > "$DIR/${FILE}.loading.txt" 2>&1; then
-		
-		mv "$DIR/${FILE}.loading.txt" "$DIR/${FILE}.loaded.txt"
-	fi
+if curl -v -X PUT --header "Content-Type: application/fhir+json" \
+	--header "Prefer: return=OperationOutcome" \
+	--output "$DIR/${FILE}.response.txt" \
+	-T "$DIR/$FILE" \
+	"${HAPI_R4}/CodeSystem/so" > "$DIR/${FILE}.loading.txt" 2>&1; then
+	
+	mv "$DIR/${FILE}.loading.txt" "$DIR/${FILE}.loaded.txt"
+fi
 
-done

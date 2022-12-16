@@ -19,7 +19,7 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-
+cd $DIR
 
 # get mondo
 if [[ !  -f mondo.owl ]] ; then
@@ -32,7 +32,7 @@ fi
 # includes bits of CHEBI etc, file is about 2x in size.
 java -jar $DIR/../../lib/fhir-owl-1.1.0.jar \
     -i mondo.owl \
-    -o $DIR/CodeSystem-mondo.json \
+    -o $DIR/mondo-CodeSystem.json \
     -id mondo \
     -name "MondoDiseaseOntology" \
     -mainNs http://purl.obolibrary.org/obo/MONDO_  \

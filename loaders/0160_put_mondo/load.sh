@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
 #
 # load.sh for mondo
-# looks for  files named <resource>_<ontology>.json, in this directory
+# looks for  files named <ontology>-<resource>.json, in this directory
 
-# Ex. CodeSystem-mondo.json
-#set -x
-set -e
-set -u
-set -o pipefail
-set -o noclobber
-#set -f # no globbing
-#shopt -s failglob # fail if glob doesn't expand
+# Ex. mondo-CodeSystem.json
+set -euo pipefail
 
 # See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
 SOURCE="${BASH_SOURCE[0]}"
@@ -26,27 +20,22 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-for f in $(find "$(cd ${DIR}; pwd)" -mindepth 1 -maxdepth 1 -type f -name "*.json" | sort); do
+f=mondo-CodeSystem.json
 	
-	if [ -f "${f}.loaded.txt" ] || [ -f "${f}.loading.txt" ] ; then
-		echo Already loaded/loading: $f
-		continue
-	fi
+if [ -f "$DIR/${f}.loaded.txt" ] || [ -f "$DIR/${f}.loading.txt" ] ; then
+	echo Already loaded/loading: $f
+fi
 	
-	echo loading: $f
+echo loading: $f
 	
-	FILENAME=$(basename "$f")
-	RESOURCE=${FILENAME%%-*}
-	ID=${FILENAME#*-}
-	ID=${ID%.json}
+if curl -v -X PUT --header "Content-Type: application/fhir+json" \
+	--header "Prefer: return=OperationOutcome" \
+	--output "$DIR/${f}.response.txt" \
+	-T "$DIR/$f" \
+	"${HAPI_R4}/CodeSystem/mondo" > "$DIR/${f}.loading.txt" 2>&1; then
 	
-	if curl -v -X PUT --header "Content-Type: application/fhir+json" \
-		--header "Prefer: return=OperationOutcome" \
-		--output "${f}.response.txt" \
-		-T "$f" \
-		"${HAPI_R4}/${RESOURCE}/$ID" > "${f}.loading.txt" 2>&1; then
-		
-		mv "${f}.loading.txt" "${f}.loaded.txt"
-	fi
+	mv "$DIR/${f}.loading.txt" "$DIR/${f}.loaded.txt"
+else
+    echo "load had issues"
+fi
 
-done

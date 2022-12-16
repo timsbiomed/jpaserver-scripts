@@ -19,7 +19,7 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-
+cd $DIR
 
 # get  SO
 if [[ !  -f so.owl ]] ; then
@@ -29,8 +29,7 @@ else
     echo "SO file found"
 fi
 
-#java -jar $DIR/../../lib/fhir-owl-1.1.0.jar \
-java -jar /Users/roederc/work/deploy/jpaserver-scripts/lib/fhir-owl-1.1.0.jar \
+java -jar $DIR/../../lib/fhir-owl-1.1.0.jar \
     -i so.owl \
     -o $DIR/so_CodeSystem.json \
     -id so \

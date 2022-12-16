@@ -20,12 +20,12 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 fi
 
 
+cd $DIR
 
 # get hpo
 if [[ !  -f hp.owl ]] ; then
     echo "getting HPO"
     wget -q https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl 2> /dev/null
-    #wget https://github.com/obophenotype/human-phenotype-ontology/archive/refs/tags/v2022-06-11.tar.gz
 else
     echo "HPO file found"
 fi
@@ -33,7 +33,7 @@ fi
 # includes bits of CHEBI etc, file is about 2x in size.
 java -jar $DIR/../../lib/fhir-owl-1.1.0.jar \
     -i hp.owl \
-    -o $DIR/CodeSystem-hpo.json \
+    -o $DIR/hp-CodeSystem.json \
     -id hpo \
     -name "HumanPhenotypeOntology" \
     -mainNs http://purl.obolibrary.org/obo/HP_  \
