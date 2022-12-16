@@ -22,7 +22,7 @@ fi
 FILE="so_CodeSystem.json"
 ID
 	
-if [ -f "${FILE}.loaded.txt" ] || [ -f "${FILE}.loading.txt" ] ; then
+if [ -f "$DIR/${FILE}.loaded.txt" ] || [ -f "$DIR/${FILE}.loading.txt" ] ; then
 	echo Already loaded/loading: $FILE
 	continue
 fi
@@ -31,11 +31,11 @@ echo loading: $FILE
 	
 	if curl -v -X PUT --header "Content-Type: application/fhir+json" \
 		--header "Prefer: return=OperationOutcome" \
-		--output "${FILE}.response.txt" \
-		-T "$FILE" \
-		"${HAPI_R4}/CodeSystem/$ID" > "${FILE}.loading.txt" 2>&1; then
+		--output "$DIR/${FILE}.response.txt" \
+		-T "$DIR/$FILE" \
+		"${HAPI_R4}/CodeSystem/$ID" > "$DIR/${FILE}.loading.txt" 2>&1; then
 		
-		mv "${FILE}.loading.txt" "${FILE}.loaded.txt"
+		mv "$DIR/${FILE}.loading.txt" "$DIR/${FILE}.loaded.txt"
 	fi
 
 done
