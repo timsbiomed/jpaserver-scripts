@@ -35,7 +35,7 @@ java -jar $DIR/../../lib/fhir-owl-1.1.0.jar \
     -o $DIR/CodeSystem-mondo.json \
     -id mondo \
     -name "MondoDiseaseOntology" \
-    -mainNs http://purl.obolibrary.org/obo/MD_  \
+    -mainNs http://purl.obolibrary.org/obo/MONDO_  \
     -status active \
     -codeReplace "_,:" \
     -s http://www.geneontology.org/formats/oboInOwl#hasExactSynonym \
