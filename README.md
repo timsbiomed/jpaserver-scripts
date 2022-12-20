@@ -34,7 +34,7 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
     - `$ git lfs pull <file>`
   - The point of the `ontology_cache/` ~directory~ repository is to cache, not to definitively store, vocabularies that aren't easily cURLed from the 'net.
 - Export scripts and configure .  In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
-  - `$ git export <branch> > jpaserver-scripts.tar  WHICH BRANCH??? (main)`
+  - `$ git export master > jpaserver-scripts.tar `
   - copy that file to the machine or place you want to deploy on
   - make a directory for its contents: 
     - `$mkdir jpaserver-scripts; cd jpaserver-scripts`
@@ -47,9 +47,10 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
       - `PGPASSWORD=it_matters_not`
       - `PGPORT=5432`
       - `PGDATABASE=hapifhir`
-      - The username will be iether postgress, or the your username on  your mac. The password isn't used by postgresapp and does not matter.
+      - The username will be either postgress, or the your username on  your mac. The password isn't used by postgresapp and does not matter. Note the database value. You'll create it later, if it doesn't exist.
     - also edit the bin/profile.sh file and set the variable HAPI_R4 to the port you want the HAPI server to run on. This number will be used again in a step below.
-  - for a Docker image: TBD
+  - create the database
+    - `$createdb hapifhir`
   - choose your `application.yaml` file. 
   - edit `hapi/application.yaml` to set some things
     - the port you want to run on. Look for "server: port:" near the top of the file, make sure it's different from the one used in tester near the bottom, and should be the same as used in `bin/profile.sh` for `HAPI_R4`.
