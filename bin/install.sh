@@ -22,6 +22,16 @@ cd $DIR/../hapi
 
 
 
+# DOWNLOAD the static content from TimsUI, put in $DIR/static-files
+if [[ ! -f TimsUI.tar ]] ; then
+    wget -q https://github.com/HOT-Ecosystem/TimsUI/releases/download/v1.0/TimsUI.tar 2> /dev/null
+    mkdir static-files
+    cd static-files
+    tar xvz  ../TimsUI.tar
+fi
+
+
+
 # DOWNLOAD CLI
 FILE=hapi-fhir-cli
 if [[ ! -f $FILE ]] ;then
@@ -40,7 +50,6 @@ if [[ ! -f $DIR/../hapi/ROOT.war ]] ;then
      # lucene doesn't appear to work with 6.0. The application.yaml needs a different line, and that didn't make it happy either.
      #wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v6.0.1/ROOT.war 2> /dev/null
      wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v5.7.0/ROOT.war 2> /dev/null
-     #wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v5.5.0/ROOT.war 2> /dev/null
 
      set +e
      set +o pipefail
@@ -60,10 +69,14 @@ else
     echo "INFO: hapi-fhir-jpaserver-starter ROOT.war seems to be already installed."
 fi
 
-# CREATE LINK TO application.yaml
-if [[ ! -f $DIR/../hapi/application.yaml ]] ;then 
-    ln -s application_phenotype_pg.yaml application.yaml
-fi
+
+# copy to  application.yaml
+#if [[ ! -f $DIR/../hapi/application.yaml ]] ;then 
+#    ln -s  application_phenotype_pg.yaml application.yaml
+#fi
+# Edit application.yaml to point to $DIR/static-files, and copy at the same time
+rm application.yaml
+cat ../hapi/application_pg.yaml | sed -e "s/XXstatic-filesXX/$DIR\/static-files/" >> ../hapi/application.yaml
 
 
 # DOWNLOAD fhir-owl 

@@ -60,9 +60,10 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
     - Choose PostgreSQL or H2 and comment the other out with a hash character on each line.
     - Turn lucene indexing on if you want it, you probably do. Search for "enable fulltext search with lucene" and uncomment.
 - Install, start and load: 
-  - fetch the HAPI CLI and a `ROOT.war` of the server
+  - fetch the HAPI CLI,  a `ROOT.war` of the server, the aehrc fhir-owl converter and the TimsUI content
     - `$ bin/install.sh`
-  - `$ source profile.sh`
+  - set environment variables for the database (PG* in the case of postgres) and the URL for htting the server (HAPI_R4)
+    - `$ source profile.sh`
   - start the server
     - `$ config/start-hapi.sh`
   - reset flag files marking a vocabulary has been loaded when repeating this step. These files are the ouput of the loading process and should be consulted in case of trouble. The presence of a file ending in either "loading.txt" or "loaded.txt" file will prevent the vocabulary from being loaded.
