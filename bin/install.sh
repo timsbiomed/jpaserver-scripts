@@ -25,9 +25,10 @@ cd $DIR/../hapi
 # DOWNLOAD the static content from TimsUI, put in $DIR/static-files
 if [[ ! -f TimsUI.tar ]] ; then
     wget -q https://github.com/HOT-Ecosystem/TimsUI/releases/download/v1.0/TimsUI.tar 2> /dev/null
-    mkdir static-files
-    cd static-files
-    tar xvz  ../TimsUI.tar
+    mkdir $DIR/../static-files
+    cd $DIR/../static-files
+    tar xvf  $DIR/../hapi/TimsUI.tar
+    cd $DIR/../hapi
 fi
 
 
@@ -49,7 +50,7 @@ if [[ ! -f $DIR/../hapi/ROOT.war ]] ;then
 
      # lucene doesn't appear to work with 6.0. The application.yaml needs a different line, and that didn't make it happy either.
      #wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v6.0.1/ROOT.war 2> /dev/null
-     wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v5.7.0/ROOT.war 2> /dev/null
+     wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v5.7.x/ROOT.war 2> /dev/null
 
      set +e
      set +o pipefail
@@ -75,9 +76,12 @@ fi
 #    ln -s  application_phenotype_pg.yaml application.yaml
 #fi
 # Edit application.yaml to point to $DIR/static-files, and copy at the same time
-rm application.yaml
-cat ../hapi/application_pg.yaml | sed -e "s/XXstatic-filesXX/$DIR\/static-files/" >> ../hapi/application.yaml
+cd $DIR
+cd ..
+BASE_DIR=`pwd`
+cat $BASE_DIR/hapi/application_pg.yaml | sed  "s|XXstatic-filesXX|$BASE_DIR/static-files/|g" >> $BASE_DIR/hapi/application.yaml
 
+cd $DIR/../hapi
 
 # DOWNLOAD fhir-owl 
 if [[ !  -f $DIR/../lib/fhir-owl-1.1.0.jar ]] ; then
