@@ -50,7 +50,7 @@ fi
 # with PSN type, the same string may have more than 1 ID
 if (( 0 )) ; then
     echo "CODE,AUI,SAB,DISPLAY,SAUI,SCUI,SDUI,CUI" > test.csv
-    cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.rrf | awk -F\| ' $13=="PSN" {print $14","$8","$12","$15","$9","$10","$11","$1 }' >> test.csv
+    cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$8","$12","$15","$9","$10","$11","$1 }' >> test.csv
 
     # 34779 individual CODES 
     cat test.csv | awk -F, '{print $1}' | sort -u | wc -l

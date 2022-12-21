@@ -34,7 +34,7 @@ fi
 # https://www.nlm.nih.gov/research/umls/rxnorm/overview.html#:~:text=In%20addition%20to%20the%20fully,form%20%2F%20ingredient%20%2B%20dose%20form%20group
 
 echo "CODE,DISPLAY" > concepts.csv
-cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.rrf | awk -F\| ' $12=="RXNORM" &&  $13=="IN" {print $14","$15 }' >> concepts.csv
+cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $12=="RXNORM" &&  $13=="IN" {print $14","$15 }' >> concepts.csv
 
 
 cat > codesystem.json <<HERE_DOC

@@ -40,7 +40,7 @@ upload-terminology \
 -d "$FILE" \
 -v r4 \
 -t "${HAPI_R4}" \
--u "http://purl.bioontology.org/ontology/RXNORM" > "${DIR}/loading.txt" 2>&1; then
+-u "http://purl.bioontology.org/ontology/RXNORMI" > "${DIR}/loading.txt" 2>&1; then
 	mv "${DIR}/loading.txt"  "${DIR}/loaded.txt"
 fi
 
