@@ -135,7 +135,7 @@ $ runoak -i OWL_PATH dump -o OUTPATH -O fhirjson
     - `./WEB-INF/lib/tomcat-embed-el-9.0.62.jar`
     - `./WEB-INF/lib/tomcat-embed-websocket-9.0.62.jar`
   - you can check with this command. No ouptut means you don't have those jars. Bad news.  
-    `$ jar tvf ROOT.war.save | grep tomcat-embed`
+    `$ jar tvf ROOT.war | grep tomcat-embed`
   - to build it properly, you need to use spring-boot's repackage target: 
     - mvn clean package spring-boot:repackage -Pboot && java -jar target/ROOT.war
     - It's crazy because just the "mvn package" command builds both ROOT.war and ROOT.war.original, making it look like some kind of repackaging is ogoing on. There may be, but it's not sufficient.
