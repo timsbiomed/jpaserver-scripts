@@ -61,7 +61,7 @@ fi
 
 
 echo "CODE,DISPLAY" > concepts.csv
-cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.rrf | awk -F\| ' $13=="PSN" {print $14","$15 }' >> concepts.csv
+cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$15 }' >> concepts.csv
 
 
 cat > codesystem.json <<HERE_DOC
