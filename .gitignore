@@ -1,6 +1,10 @@
 .idea/
 logs/
 lucene-*
+venv/
+.log
+.err
+
 
 
 bin/.env-local
