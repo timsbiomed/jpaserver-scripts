@@ -33,7 +33,7 @@ if curl -v -X PUT --header "Content-Type: application/fhir+json" \
 	--header "Prefer: return=OperationOutcome" \
 	--output "$DIR/${f}.response.txt" \
 	-T "$DIR/$f" \
-	"${HAPI_R4}/CodeSystem/rxnormjoe" > "$DIR/${f}.loading.txt" 2>&1; then
+	"${HAPI_R4}/CodeSystem/comploinc" > "$DIR/${f}.loading.txt" 2>&1; then
 	
 	mv "$DIR/${f}.loading.txt" "$DIR/${f}.loaded.txt"
 else
