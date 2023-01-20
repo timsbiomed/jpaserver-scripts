@@ -1,48 +1,31 @@
 #!/usr/bin/env bash
-#set -x
-set -e
-set -u
-set -o pipefail
-set -o noclobber
-#set -f # no globbing
-#shopt -s failglob # fail if glob doesn't expand
+set -euo pipefail
 
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+LOADER_DIRS=(comp_loinc hpo icd10 loinc mondo rxnorm rxnorm_via_owl snomed so)
 
-
-source $DIR/../bin/profile.sh
-
-
-source "${DIR}/env.sh"
-if [ -f "$DIR/.env-local" ]; then
-	source "$DIR/.env-local"
-fi
-
-#for d in $(find "$(cd ${DIR}/../loaders; pwd)" -mindepth 1 -maxdepth 1 -type d | sort); do
-# is order really important?
-
-for d in $DIR/../loaders/* ; do
-  if [[ -d $d ]] ; then		
-	if [[  $d == *.off ]]; then
-		echo skipping loader: $d
-		continue
+for DIR in $LOADER_DIRS ; do
+  if [[ -d $DIR ]] ; then		
+	
+	if [ -f "${DIR}/build.sh" ]; then
+	    echo "building: $DIR"
+		"${DIR}/build.sh"
+        if (( $? )) ; then
+            echo "ERROR building $DIR"
+        fi
+    else 
+        echo "ERROR, no build script for $DIR"
+        exit 1
 	fi
 	
-	if [ -f "${d}/build.sh" ]; then
-	    echo building: $d
-		"${d}/build.sh"
-	fi
-	
-	if [ -f "${d}/load.sh" ]; then
-	    echo loading: $d
-		"${d}/load.sh"
+	if [ -f "${DIR}/load.sh" ]; then
+	    echo "loading: $d"
+		"${DIR}/load.sh"
+        if (( $? )) ; then
+            echo "ERROR loading $DIR"
+        fi
+    else 
+        echo "ERROR, no load script for $DIR"
+        exit 1
 	fi
   fi
 done

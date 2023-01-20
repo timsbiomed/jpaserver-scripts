@@ -2,24 +2,11 @@
 # gets a v6 HAPI jpaserver-starter
 
 
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-
-# This is the bin directory. 
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-
-cd $DIR/../hapi
-
+cd $TIMS_DIR/hapi
 
 
 # DOWNLOAD hapi-fhir-jpaserver-starter
-if [[ ! -f $DIR/../hapi/ROOT_6.0.1.war ]] ;then 
+if [[ ! -f ROOT_6.0.1.war ]] ;then 
 
     # rm previouis ROOT.war in case it's a 5.x one.. wget will not download over it, but create ROOT.war.1
     rm ROOT.war

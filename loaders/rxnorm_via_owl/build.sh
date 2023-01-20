@@ -3,24 +3,7 @@ set -euo pipefail
 source venv/bin/activate
 
 
-
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-source "${DIR}/../../bin/env.sh"
-if [ -f "${DIR}/../../bin/.env-local" ]; then
-	source "${DIR}/../../bin/.env-local"
-fi
-
-cd $DIR
-
-
+cd $TIMS_DIR/loaders/rxnorm_via_owl
 
 
 # check the input files are there
@@ -44,7 +27,7 @@ echo "done"
 ls RXNORM_fixed.ttl
 
 # CONVERT to FHIR
-runoak -i RXNORM_fixed.ttl dump -o codesystem.json -O fhirjson --include-all-predicates
+runoak -i RXNORM_fixed.ttl dump -o CodeSystem-RXNORM.json -O fhirjson --include-all-predicates
 
 // PREPARE HAPI CLI ZIP
 # https://smilecdr.com/docs/terminology/uploading.html

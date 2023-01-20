@@ -1,11 +1,7 @@
 # jpaserver-scripts (public)
-scripts to start and config the hapi-fhir-jpaserver-starter
+Scripts to install, configure and start the hapi-fhir-jpaserver-starter.
+Initial by Shehim Essaid, mods by Chris Roeder
 - assumes a companion repo, ontology_cache is in the same directory as this repo.
-
-This is NOT a **private** repo anymore so we DO have to sweat leaving passwords or data in here.
-
-The reason for putting into git is so we can easily adapt this to laptop use, and so we can have a reproducible process for setting up and loading the server.
-I'm on macos, which doesn't have systemd. No attempt to address Windows.
 
 For now, scripts here install the following versions:
  - hapi-fhir-6.1.3-cli from http://github.com/hapifhir

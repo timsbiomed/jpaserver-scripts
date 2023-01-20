@@ -1,29 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Super basic conversion of RxNorm "pills only", names and IDs, that's all for now.
-# assumes files are available in ontology_cache
-
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-source "${DIR}/../../bin/env.sh"
-if [ -f "${DIR}/../../bin/.env-local" ]; then
-	source "${DIR}/../../bin/.env-local"
-fi
-
-cd $DIR
+# Super basic conversion of RxNorm "pills only", names and IDs, that's all for now. 
+# After scraping what it needs from the RRF files into a concepts.csv file, it creates
+# a zip file for the HAPI CLI to load.
+# Assumes files are available in ontology_cache
 
 
+cd $TIMS_DIR/loaders/rxnorm
 
 
 # check the input files are there
-if [[ ! -e ../../../ontology_cache/rxnorm ]] ; then
+if [[ ! -e TIMS_DIR/ontology_cache/rxnorm ]] ; then
     echo "error, no rxnorm in ontology_chache."
     exit 1;
 else
@@ -50,7 +37,7 @@ fi
 # with PSN type, the same string may have more than 1 ID
 if (( 0 )) ; then
     echo "CODE,AUI,SAB,DISPLAY,SAUI,SCUI,SDUI,CUI" > test.csv
-    cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$8","$12","$15","$9","$10","$11","$1 }' >> test.csv
+    cat $TIMS_DIR/ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$8","$12","$15","$9","$10","$11","$1 }' >> test.csv
 
     # 34779 individual CODES 
     cat test.csv | awk -F, '{print $1}' | sort -u | wc -l
@@ -61,8 +48,8 @@ fi
 
 
 echo "CODE,DISPLAY" > concepts.csv
-cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$15 }' >> concepts.csv
-cat ../../../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $12=="RXNORM" &&  $13=="IN" {print $14","$15 }' >> concepts.csv
+cat $TIMS_DIR/ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$15 }' >> concepts.csv
+cat $TIMS_DIR/ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $12=="RXNORM" &&  $13=="IN" {print $14","$15 }' >> concepts.csv
 
 
 cat > codesystem.json <<HERE_DOC

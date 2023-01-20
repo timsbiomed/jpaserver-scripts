@@ -2,33 +2,17 @@
 # gets the CLI and the hapi server
 
 
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-
-# This is the bin directory. 
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-set +e
-  mkdir $DIR/../lib
-set -e
-
-
-cd $DIR/../hapi
+cd $TIMS_DIR/hapi
 
 
 
-# DOWNLOAD the static content from TimsUI, put in $DIR/static-files
+# DOWNLOAD the static content from TimsUI, put in $TIMS_DIR/static-files
 if [[ ! -f TimsUI.tar ]] ; then
     wget -q https://github.com/HOT-Ecosystem/TimsUI/releases/download/v1.0/TimsUI.tar 2> /dev/null
-    mkdir $DIR/../static-files
-    cd $DIR/../static-files
-    tar xvf  $DIR/../hapi/TimsUI.tar
-    cd $DIR/../hapi
+    mkdir $TIMS_DIR/static-files
+    cd $TIMS_DIR/static-files
+    tar xvf  $TIMS_DIR/hapi/TimsUI.tar
+    cd $TIMS_DIR/hapi
 fi
 
 
@@ -46,7 +30,7 @@ fi
 
 
 # DOWNLOAD hapi-fhir-jpaserver-starter
-if [[ ! -f $DIR/../hapi/ROOT.war ]] ;then 
+if [[ ! -f $TIMS_DIR/hapi/ROOT.war ]] ;then 
 
      # lucene doesn't appear to work with 6.0. The application.yaml needs a different line, and that didn't make it happy either.
      #wget -q https://github.com/HOT-Ecosystem/hapi-fhir-jpaserver-starter/releases/download/v6.0.1/ROOT.war 2> /dev/null
@@ -72,22 +56,20 @@ fi
 
 
 # copy to  application.yaml
-#if [[ ! -f $DIR/../hapi/application.yaml ]] ;then 
+#if [[ ! -f $TIMS_DIR/hapi/application.yaml ]] ;then 
 #    ln -s  application_phenotype_pg.yaml application.yaml
 #fi
-# Edit application.yaml to point to $DIR/static-files, and copy at the same time
-cd $DIR
-cd ..
-BASE_DIR=`pwd`
-cat $BASE_DIR/hapi/application_pg.yaml | sed  "s|XXstatic-filesXX|$BASE_DIR/static-files/|g" >> $BASE_DIR/hapi/application.yaml
+# Edit application.yaml to point to $TIMS_DIR/static-files, and copy at the same time
+cd $TIMS_DIR
+cat $TIMS_DIR/hapi/application_pg.yaml | sed  "s|XXstatic-filesXX|$TIMS_DIR/static-files/|g" >> $TIMS_DIR/hapi/application.yaml
 
-cd $DIR/../hapi
+cd $TIMS_DIR/hapi
 
 # DOWNLOAD fhir-owl 
-if [[ !  -f $DIR/../lib/fhir-owl-1.1.0.jar ]] ; then
+if [[ !  -f $TIMS_DIR/lib/fhir-owl-1.1.0.jar ]] ; then
     wget https://github.com/HOT-Ecosystem/fhir-owl/releases/download/Oct_24_2022/fhir-owl-1.1.0.jar
     ls fhir-owl-1.1.0.jar
-    mv fhir-owl-1.1.0.jar $DIR/../lib
+    mv fhir-owl-1.1.0.jar $TIMS_DIR/lib
 fi
 
 

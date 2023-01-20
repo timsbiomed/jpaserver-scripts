@@ -5,21 +5,7 @@ set -euo pipefail
 # reads: so.owl
 # writes: so_CodeSystem.json
 
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-source "${DIR}/../../bin/env.sh"
-if [ -f "${DIR}/../../bin/.env-local" ]; then
-	source "${DIR}/../../bin/.env-local"
-fi
-
-cd $DIR
+cd $TIMS_DIR/loaders/so
 
 # get  SO
 if [[ !  -f so.owl ]] ; then
@@ -29,9 +15,9 @@ else
     echo "SO file found"
 fi
 
-java -jar $DIR/../../lib/fhir-owl-1.1.0.jar \
+java -jar $TIMS_DIR/lib/fhir-owl-1.1.0.jar \
     -i so.owl \
-    -o $DIR/so_CodeSystem.json \
+    -o so_CodeSystem.json \
     -id so \
     -name "SequenceOntology" \
     -mainNs http://purl.obolibrary.org/obo/SO_  \

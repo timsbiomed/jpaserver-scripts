@@ -6,40 +6,16 @@
 # Ex. mondo-CodeSystem.json
 set -euo pipefail
 
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+cd $TIMS_DIR/loaders/rxnorm_via_owl
+f=CodeSystem-RXNORM.json
 
-source "${DIR}/../../bin/env.sh"
-if [ -f "${DIR}/../../bin/.env-local" ]; then
-	source "${DIR}/../../bin/.env-local"
-fi
-
-f=codesystem.json
-
-########## fun starts here #################
-
-if [ -f "$DIR/${f}.loaded.txt" ] || [ -f "$DIR/${f}.loading.txt" ] ; then
-	echo Already loaded/loading: $f
-    exit 1
-fi
-
-	
-echo loading: $f
-	
-if curl -v -X PUT --header "Content-Type: application/fhir+json" \
+curl -v -X PUT --header "Content-Type: application/fhir+json" \
 	--header "Prefer: return=OperationOutcome" \
-	--output "$DIR/${f}.response.txt" \
-	-T "$DIR/$f" \
-	"${HAPI_R4}/CodeSystem/core" > "$DIR/${f}.loading.txt" 2>&1; then
-	
-	mv "$DIR/${f}.loading.txt" "$DIR/${f}.loaded.txt"
-else
-    echo "load had issues"
+	--output "${f}.response.txt" \
+	-T "$f" \
+	"${HAPI_R4}/CodeSystem/core" > "${f}.log" 2>&1
+
+if (( $? )); then
+    echo "ERROR, rxnorm_via_owl load had issues with $f"
 fi
 

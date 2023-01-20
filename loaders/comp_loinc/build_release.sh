@@ -2,24 +2,9 @@
 set -euo pipefail
 source venv/bin/activate
 
+# assumes corresponding install_release.sh local to loaders/comp_loinc  has been run 
 
-
-# See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-source "${DIR}/../../bin/env.sh"
-if [ -f "${DIR}/../../bin/.env-local" ]; then
-	source "${DIR}/../../bin/.env-local"
-fi
-cd $DIR
- 
-############################# fun starts here #####################
+cd $TIMS_DIR/loaders/comp_loinc
 
 # check the input files are there
 if [[ ! -e merged_reasoned_loinc.owl ]] ; then
@@ -30,11 +15,13 @@ else
 fi
 
 # CONVERT to FHIR
-echo "starting OAK"
-#runoak -i merged_reasoned_loinc.owl dump -o codesystem.json -O fhirJson --include-all-predicates 2> oak.err > oak.log &
-runoak -i merged_reasoned_loinc.owl dump -o codesystem.json -O fhirJson --include-all-predicates 2> oak.err > oak.log 
-#runoak -i merged_reasoned_loinc.owl dump -o codesystem.json -O fhirJson --include-all-predicates 
-echo "OAK is done"
+runoak -i merged_reasoned_loinc.owl dump -o CodeSystem-CompLOINC.json -O fhirJson --include-all-predicates 2> oak.err > oak.log 
+if [[ $? ]] ; then
+    echo "OAK is done"
+else
+    echo "ERROR, OAK seems to have had errors"
+    exit 1
+fi
 
 
 
