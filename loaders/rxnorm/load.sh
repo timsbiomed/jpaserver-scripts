@@ -2,7 +2,7 @@
 #
 # load.sh for RxNORM CSV
 
-set -euo pipefail
+set -uo pipefail
 
 cd $TIMS_DIR/loaders/rxnorm
 
@@ -22,7 +22,7 @@ fi
   -t "${HAPI_R4}" \
   -u "http://purl.bioontology.org/ontology/RXNORM" > "$FILE.log" 2>&1
 
-if [[ $? ]]; then	
+if (( $? )); then	
     echo "ERROR, rxnorm load of $f  had issues"
 fi
 

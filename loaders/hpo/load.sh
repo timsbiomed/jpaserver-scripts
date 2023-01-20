@@ -4,7 +4,7 @@
 # looks for  files named <resource>_<ontology>.json in this directory
 
 # Ex. CodeSystem-hpo.json
-set -euo pipefail
+set -uo pipefail
 
 cd $TIMS_DIR/loaders/hpo
 f=hp-CodeSystem.json
@@ -12,9 +12,9 @@ f=hp-CodeSystem.json
 curl -v -X PUT --header "Content-Type: application/fhir+json" \
 	--header "Prefer: return=OperationOutcome" \
 	--output "$f.response.txt" \
-	-T "$DIR/${f}" \
+	-T "${f}" \
 	"${HAPI_R4}/CodeSystem/hpo" > "${f}.log" 2>&1
 
-if [[ $? ]]; then	
+if (( $? )); then	
     echo "ERROR hpo load of $f  had issues"
 fi

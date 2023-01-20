@@ -4,7 +4,7 @@
 # looks for  files named <ontology>-<resource>.json, in this directory
 
 # Ex. mondo-CodeSystem.json
-set -euo pipefail
+set -uo pipefail
 
 cd $TIMS_DIR/loaders/rxnorm_via_owl
 f=CodeSystem-RXNORM.json

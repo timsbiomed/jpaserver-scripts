@@ -4,10 +4,10 @@
 # looks for file in the ontology_cache,
 #     named SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip explicitly
 
-set -euo pipefail
+set -uo pipefail
 
 
-FILE="${TIMS_DIR}/ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
+FILE="${TIMS_DIR}/../ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
 
 FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
 echo "FILE SIZE $FILE_SIZE FILE $FILE"
@@ -23,7 +23,7 @@ fi
   -t "${HAPI_R4}" \
   -u http://snomed.info/sct > "${FILE}.log" 2>&1
 
-if [[ $? ]]; then	
+if (( $? )); then	
     echo "ERROR, snomed load of $FILE  had issues"
 fi
 

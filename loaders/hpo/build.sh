@@ -6,7 +6,7 @@ set -euo pipefail
 #  script expects.
 
 
-cd $TIMS_DIR/hpo
+cd $TIMS_DIR/loaders/hpo
 
 # get hpo
 if [[ !  -f hp.owl ]] ; then

@@ -10,7 +10,7 @@ cd $TIMS_DIR/loaders/rxnorm
 
 
 # check the input files are there
-if [[ ! -e TIMS_DIR/ontology_cache/rxnorm ]] ; then
+if [[ ! -e $TIMS_DIR/../ontology_cache/rxnorm ]] ; then
     echo "error, no rxnorm in ontology_chache."
     exit 1;
 else
@@ -37,7 +37,7 @@ fi
 # with PSN type, the same string may have more than 1 ID
 if (( 0 )) ; then
     echo "CODE,AUI,SAB,DISPLAY,SAUI,SCUI,SDUI,CUI" > test.csv
-    cat $TIMS_DIR/ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$8","$12","$15","$9","$10","$11","$1 }' >> test.csv
+    cat $TIMS_DIR/../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$8","$12","$15","$9","$10","$11","$1 }' >> test.csv
 
     # 34779 individual CODES 
     cat test.csv | awk -F, '{print $1}' | sort -u | wc -l
@@ -48,8 +48,8 @@ fi
 
 
 echo "CODE,DISPLAY" > concepts.csv
-cat $TIMS_DIR/ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$15 }' >> concepts.csv
-cat $TIMS_DIR/ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $12=="RXNORM" &&  $13=="IN" {print $14","$15 }' >> concepts.csv
+cat $TIMS_DIR/../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $13=="PSN" {print $14","$15 }' >> concepts.csv
+cat $TIMS_DIR/../ontology_cache/rxnorm/rrf/RXNCONSO.RRF | awk -F\| ' $12=="RXNORM" &&  $13=="IN" {print $14","$15 }' >> concepts.csv
 
 
 cat > codesystem.json <<HERE_DOC

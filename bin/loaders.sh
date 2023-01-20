@@ -3,12 +3,14 @@ set -euo pipefail
 
 LOADER_DIRS=(comp_loinc hpo icd10 loinc mondo rxnorm rxnorm_via_owl snomed so)
 
-for DIR in $LOADER_DIRS ; do
-  if [[ -d $DIR ]] ; then		
-	
-	if [ -f "${DIR}/build.sh" ]; then
+cd $TIMS_DIR/loaders
+for DIR in ${LOADER_DIRS[@]} ; do
+  echo $DIR
+  if [[ -d $TIMS_DIR/loaders/$DIR ]] ; then		
+
+	if [ -f "$TIMS_DIR/loaders/${DIR}/build.sh" ]; then
 	    echo "building: $DIR"
-		"${DIR}/build.sh"
+		"$TIMS_DIR/loaders/${DIR}/build.sh"
         if (( $? )) ; then
             echo "ERROR building $DIR"
         fi
@@ -17,9 +19,9 @@ for DIR in $LOADER_DIRS ; do
         exit 1
 	fi
 	
-	if [ -f "${DIR}/load.sh" ]; then
-	    echo "loading: $d"
-		"${DIR}/load.sh"
+	if [ -f "$TIMS_DIR/loaders/${DIR}/load.sh" ]; then
+	    echo "loading: $DIR"
+		"$TIMS_DIR/loaders/${DIR}/load.sh"
         if (( $? )) ; then
             echo "ERROR loading $DIR"
         fi

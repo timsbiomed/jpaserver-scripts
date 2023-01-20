@@ -3,7 +3,7 @@
 # load.sh for Sequence Ontology CodeSystem, into server at $HAPI_R4
 #   reads:  so_CodeSystem.json
 
-set -euo pipefail
+set -uo pipefail
 
 FILE="so_CodeSystem.json"
 	
@@ -15,7 +15,7 @@ curl -v -X PUT --header "Content-Type: application/fhir+json" \
 	-T "$DIR/$FILE" \
 	"${HAPI_R4}/CodeSystem/so" > "${FILE}.log" 2>&1
 
-if [[ $? ]]; then	
+if (( $? )); then	
     echo "ERROR, SO load of $FILE  had issues"
 fi
 	

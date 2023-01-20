@@ -2,7 +2,7 @@
 #
 # load.sh for RxNORM CSV
 
-set -euo pipefail
+set -uo pipefail
 
 cd $TIMS_DIR/loaders/comp_loinc
 f=CodeSystem-CompLOINC.json
@@ -14,7 +14,7 @@ curl -v -X PUT --header "Content-Type: application/fhir+json" \
 	-T "$f" \
 	"${HAPI_R4}/CodeSystem/comploinc" > "${f}.log" 2>&1
 
-if [[ $? ]]; then	
+if (( $? )); then	
     echo "ERROR comp_loinc load of $f  had issues"
 fi
 
