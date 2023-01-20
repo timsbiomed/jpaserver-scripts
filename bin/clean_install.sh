@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# removes things installed by install.sh
+# removes things installed by install.sh. It cleans the install, not clean and install.
 
 
 # See http://stackoverflow.com/questions/getting-the-source-directory-of-a-bash-script-from-within

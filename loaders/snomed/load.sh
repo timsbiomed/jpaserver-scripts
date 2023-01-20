@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
-# load.sh for loinc
-# looks for file in the ontology cache, named Loinc_2.72.zip explicitly
+# load.sh for Snomed
+# looks for file in the ontology_cache,
+#     named SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip explicitly
 
 #set -x
 set -e
@@ -25,24 +26,28 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
-FILE="${DIR}/../../../ontology_cache/Loinc_2.72.zip"
-FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
-if (( $FILE_SIZE < 10000 )) ; then
-    echo "input file is suspiciously small. try git lfs install, the git lfs pull Loinc_2.72.zip"
-    echo "(I'm thinking it's just a reference file and git-lfs needs to be installed and run to pull the real file down.)"
-fi
+
+FILE="${DIR}/../../../ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
 
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
 	echo Skipping: "$FILE"
 	exit 0
 fi
 
-if "${DIR}/../../bin/hapi-cli.sh" \
+FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
+echo "FILE SIZE $FILE_SIZE FILE $FILE"
+ls $FILE
+if (( $FILE_SIZE < 10000 )) ; then
+    echo "input file is suspiciously small. try git lfs install, the git lfs pull SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
+    echo "(I'm thinking it's just a reference file and git-lfs needs to be installed and run to pull the real file down.)"
+fi
+
+if "${DIR}/../../hapi/hapi-fhir-cli" \
 upload-terminology \
-  -d "$FILE" \
-  -v r4 \
-  -t "${HAPI_R4}" \
-  -u http://loinc.org > "${DIR}/loading.txt" 2>&1; then
+-d "$FILE" \
+-v r4 \
+-t "${HAPI_R4}" \
+-u http://snomed.info/sct > "${DIR}/loading.txt" 2>&1; then
 	mv "${DIR}/loading.txt"  "${DIR}/loaded.txt"
 fi
 

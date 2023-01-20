@@ -35,7 +35,7 @@ if (( $FILE_SIZE < 10000 )) ; then
     echo "(I'm thinking it's just a reference file and git-lfs needs to be installed and run to pull the real file down.)"
 fi
 
-if "${DIR}/../../bin/hapi-cli.sh" \
+if "${DIR}/../../hapi/hapi-fhir-cli" \
 upload-terminology \
 -d "$FILE" \
 -v r4 \

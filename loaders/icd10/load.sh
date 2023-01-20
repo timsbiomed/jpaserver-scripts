@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 #
-# load.sh for Snomed
-# looks for file in the ontology_cache,
-#     named SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip explicitly
+# load.sh for icd10
+# looks for file in the ontology cache, named icd10cm_tabular_2022.xml  explicitly
 
 #set -x
 set -e
@@ -26,28 +25,26 @@ if [ -f "${DIR}/../../bin/.env-local" ]; then
 	source "${DIR}/../../bin/.env-local"
 fi
 
+FILE="${DIR}/../../../ontology_cache/icd10cm_tabular_2022.xml"
+FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
+if (( $FILE_SIZE < 10000 )) ; then
+    echo "input file is suspiciously small. try git lfs install, the git lfs pull icd10cm_tabular_2022.xml"
+    echo "(I'm thinking it's just a reference file and git-lfs needs to be installed and run to pull the real file down.)"
+fi
 
-FILE="${DIR}/../../../ontology_cache/SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
 
 if [ -f "${DIR}/loading.txt" ] || [ -f "${DIR}/loaded.txt" ]; then
 	echo Skipping: "$FILE"
 	exit 0
 fi
 
-FILE_SIZE=`ls -l $FILE | awk '{print $5}'`
-echo "FILE SIZE $FILE_SIZE FILE $FILE"
-ls $FILE
-if (( $FILE_SIZE < 10000 )) ; then
-    echo "input file is suspiciously small. try git lfs install, the git lfs pull SnomedCT_USEditionRF2_PRODUCTION_20210901T120000Z.zip"
-    echo "(I'm thinking it's just a reference file and git-lfs needs to be installed and run to pull the real file down.)"
-fi
-
-if "${DIR}/../../bin/hapi-cli.sh" \
+if "${DIR}/../../hapi/hapi-fhir-cli" \
 upload-terminology \
 -d "$FILE" \
 -v r4 \
 -t "${HAPI_R4}" \
--u http://snomed.info/sct > "${DIR}/loading.txt" 2>&1; then
+-u http://hl7.org/fhir/sid/icd-10-cm > "${DIR}/loading.txt" 2>&1; then
 	mv "${DIR}/loading.txt"  "${DIR}/loaded.txt"
 fi
+
 
