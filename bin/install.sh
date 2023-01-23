@@ -66,6 +66,10 @@ cat $TIMS_DIR/hapi/application_pg.yaml | sed  "s|XXstatic-filesXX|$TIMS_DIR/stat
 cd $TIMS_DIR/hapi
 
 # DOWNLOAD fhir-owl 
+if [[ !  -d $TIMS_DIR/lib ]] ; then
+    mkdir $TIMS_DIR/lib 
+fi
+
 if [[ !  -f $TIMS_DIR/lib/fhir-owl-1.1.0.jar ]] ; then
     wget https://github.com/HOT-Ecosystem/fhir-owl/releases/download/Oct_24_2022/fhir-owl-1.1.0.jar
     ls fhir-owl-1.1.0.jar

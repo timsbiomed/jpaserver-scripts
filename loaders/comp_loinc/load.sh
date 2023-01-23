@@ -5,7 +5,8 @@
 set -uo pipefail
 
 cd $TIMS_DIR/loaders/comp_loinc
-f=CodeSystem-CompLOINC.json
+#f=CodeSystem-CompLOINC.json
+f=CodeSystem-comp-loinc.json
 
 
 curl -v -X PUT --header "Content-Type: application/fhir+json" \
