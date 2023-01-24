@@ -3,23 +3,26 @@ Scripts to install, configure and start the hapi-fhir-jpaserver-starter.
 Initial by Shehim Essaid, mods by Chris Roeder
 - assumes a companion repo, ontology_cache is in the same directory as this repo.
 
+## Quick Install, see section below: "Install, start and load"
+
+## Intro
 For now, scripts here install the following versions:
  - hapi-fhir-6.1.3-cli from http://github.com/hapifhir
- - v5.7.0 of the jpaserver-starter ROOT war from http://github.com/HOT-Ecosystem/hapi-fhir-jpaserverstarter
+ - v5.7.x of the jpaserver-starter ROOT war from
+ http://github.com/HOT-Ecosystem/hapi-issues (formerly http://github.com/HOT-Ecosystem/hapi-fhir-jpaserverstarter). The x is for a tag/release built from 5.7.0 that includes a PR for static content. Future 6.x releases will have that (as of roughly 2023/01/01).
  - fhir-owl 1.1.0 from github.com/HOT-Ecosystem/fhir-owl.
 I tried 5.5 and had difficulty. I also tried 6.0.1 though that path is not fully explored.
 
-Other code may be loaded as part of the `loaders/*/build.sh` scripts.
+Other code is loaded as part of the `loaders/*/build.sh` scripts.
 
 In the following list of steps, a line starting with a `$` is one to be entered on the command line. Don't repeat the `$` sign. It's mean as the prompt you see there.
 
 ## Defaults
-The defaults are set up to run against a postgres database on the localhost, called hapifhir (that you create in a step below) installed on macos with postgres app,
-on port 8001, with lucene enabled and a number of ontologies loaded.
+The defaults are set up to run against a postgres database on the localhost at port 5432, called hapifhir (that you create in a step below) installed on macos with postgres app. Also included in the defaults are for the app to run on port 8001, with lucene enabled and a number of ontologies loaded. IGs are optional. This configuration starts from hapi/application_pg.yaml, gets modified to say where the static content is and copied to application.yaml.
 
 ## Steps
-### Set up, installation, and deployment
-- Install PostgreSQL if you want to use it. 
+### Preliminaries: Postgres
+- Install PostgreSQL 
   - I use https://postgresapp.com/ on macos.
   - For postgresapp, create a server. I call mine hapifhir, but don't confuse it with the database in the next step.
   - Create a database called hapifhir, with createdb.
@@ -29,14 +32,17 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
   - if you've already cloned the repo, the files in ontology_cache will be too small. Re-download each with
     - `$ git lfs pull <file>`
   - The point of the `ontology_cache/` ~directory~ repository is to cache, not to definitively store, vocabularies that aren't easily cURLed from the 'net.
-- Export scripts and configure .  In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
-  - `$ git export master > jpaserver-scripts.tar `
-  - copy that file to the machine or place you want to deploy on
-  - make a directory for its contents: 
-    - `$mkdir jpaserver-scripts; cd jpaserver-scripts`
+- Export scripts and configure .  
+  - Latest code, In a terminal window with a bash or z-shell, from the top-level directory of the git repo where you found this file:
+    - `$ git export master > jpaserver-scripts.tar `
+  - Or use a release:  
+    - `$ wget https://github.com/HOT-Ecosystem/jpaserver-scripts/releases/download/Post_Jan_Connectathon/jpaserver-scripts.tar 2> /dev/null`
+  - Then copy the chosen and downlaoded  file to the machine or place you want to deploy on
+    - make a directory for its contents: 
+      - `$mkdir jpaserver-scripts; cd jpaserver-scripts`
   - expand it: 
     - `$ tar xvf ../jpaserver-scripts.tar`
-  - edit bin/profile.sh to have connection info to your postgres instance if you're doing that. H2 doesn't require this. 
+  - edit bin/profile.sh to have connection info to your postgres instance if you're doing that. H2 doesn't require this. Defaults work for postgresapp.
     - for postgresapp:
       - `PGHOST=localhost`
       - `PGUSER=<user>`
@@ -47,27 +53,25 @@ on port 8001, with lucene enabled and a number of ontologies loaded.
     - also edit the bin/profile.sh file and set the variable HAPI_R4 to the port you want the HAPI server to run on. This number will be used again in a step below.
   - create the database
     - `$createdb hapifhir`
-  - choose your `application.yaml` file. 
+  - choose your `application.yaml` file.  The bin/install.sh script starts with application_pg.yaml. If you choose a different one, either note the modification it makes with sed near the bottom of the file and add that to your choice manually, or edit the file the script starts with.
   - edit `hapi/application.yaml` to set some things
     - the port you want to run on. Look for "server: port:" near the top of the file, make sure it's different from the one used in tester near the bottom, and should be the same as used in `bin/profile.sh` for `HAPI_R4`.
-        - server port is often 8000 ?????
-        - testeer???
+        - server port defaults to  8001  and is reflected (must be reflected) in the HAPI_R4 variable in the profile.sh
     - connection info to your postgres instance. For postgres, this should use the PG* variables (no underscore) set above, and the defaults are written to refer to those variables, so no action is needed.
-    - Choose PostgreSQL or H2 and comment the other out with a hash character on each line.
-    - Turn lucene indexing on if you want it, you probably do. Search for "enable fulltext search with lucene" and uncomment.
-- Install, start and load: 
-  - fetch the HAPI CLI,  a `ROOT.war` of the server, the aehrc fhir-owl converter and the TimsUI content
-    - `$ bin/install.sh`
+    - Uncomment desired IGs 
+
+## Install, start and load: 
   - set environment variables for the database (PG* in the case of postgres) and the URL for htting the server (HAPI_R4)
     - `$ source profile.sh`
+  - fetch the HAPI CLI,  a `ROOT.war` of the server, the aehrc fhir-owl converter and the TimsUI content
+    - `$ bin/install.sh`
   - start the server
     - `$ config/start-hapi.sh`
-  - reset flag files marking a vocabulary has been loaded when repeating this step. These files are the ouput of the loading process and should be consulted in case of trouble. The presence of a file ending in either "loading.txt" or "loaded.txt" file will prevent the vocabulary from being loaded.
-    - `$ rm loaders/*/*.txt`
   - load the vocabularies
     - `$ bin/loaders.sh`
   - test with the Jupyter notebooks available at https://github.com/HOT-Ecosystem/TSDemoBoard
     - assuming defaults, the `BASE_URL` there should be set in accord with values here, `BASE_URL =\"http://localhost:8001/fhir/"`
+  - test also with the TimsUI, installed as part of this installation, accessable at http://<server>:8001/static/index.html
 
 ### Running things manually
 This project is set up to run things automatically. However, it is possible to run some things manually, which may be useful for troubleshooting.
@@ -92,25 +96,10 @@ $ runoak -i OWL_PATH dump -o OUTPATH -O fhirjson
   - It has lucene search enabled.
   - It has a paragraph called tester, that needs explored, explained or removed: TBD.
 
-## TODO
+## TODO / Questions
 - What is the Terminology block you see at the bottom of some application.yaml files? see the app.6.yaml file
 - fhir-owl is throwing an error about a hex-binary converter when it does Mondo
-- functions from env.sh should probably be part of profile.sh. Joe and Shahim like the behind the scenes and automatic nature of .env, but it was causing problems.
-- I have not tested the systemd integration.
-- Where is the input for the 0140 OMOP stuff? I've read the code about tearing apart the file name as a source of metadata for the possibly multiple input files, but I have no idea where they are. The server has some. I don't know the provenance.
-  - `./timsts/loaders/0140_put_omop_codesystems/CodeSystem-CPT4-2021.Release.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/ICD10WHO-unknown-version.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Gender-unknown-version.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/ICD9Proc-ICD9CM.v32.master.descriptions.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/HCPCS-2020.Alpha.Numeric.File.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/RxNorm-20220307.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/ICD9CM-v32.master.descriptions.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Extension-20220622.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/ICD10PCS-2021.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/SNOMED.Veterinary-20190401.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Ethnicity-unknown-version.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/ICD10CM-FY2022.code.descriptions.json`
-  - `./timsts/loaders/0140_put_omop_codesystems/hold/OMOP.Race.and.Ethnicity-unknown-version.json`
+- systemd integration for production deployments
 
 ## NOTES & Tricks
 - get an application.yaml file from the downloaed release, to then modify with local database connection info
@@ -135,7 +124,7 @@ $ runoak -i OWL_PATH dump -o OUTPATH -O fhirjson
     `$ jar tvf ROOT.war | grep tomcat-embed`
   - to build it properly, you need to use spring-boot's repackage target: 
     - mvn clean package spring-boot:repackage -Pboot && java -jar target/ROOT.war
-    - It's crazy because just the "mvn package" command builds both ROOT.war and ROOT.war.original, making it look like some kind of repackaging is ogoing on. There may be, but it's not sufficient.
+    - It's odd because just the "mvn package" command builds both ROOT.war and ROOT.war.original, making it look like some kind of repackaging is ogoing on. There may be, but it's not sufficient.
 - database errors may have to do with the local postgres server not being up, or the environment variables not being set right
 - server port can be tricky. 
   - it defaults to 8080, and is set by the server port field, but should not conflict (AFAICT) with the port in the tester paragraph.
