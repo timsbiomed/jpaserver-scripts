@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # gets the CLI and the hapi server
 
 
@@ -8,7 +10,7 @@ cd $TIMS_DIR/hapi
 
 # DOWNLOAD the static content from TimsUI, put in $TIMS_DIR/static-files
 if [[ ! -f TimsUI.tar ]] ; then
-    wget -q https://github.com/HOT-Ecosystem/TimsUI/releases/download/v1.0/TimsUI.tar 2> /dev/null
+    wget -q https://github.com/HOT-Ecosystem/TimsUI/releases/download/Jan_Connectathon/TimsUI_Jan_Connectathon.tar 2> /dev/null
     mkdir $TIMS_DIR/static-files
     cd $TIMS_DIR/static-files
     tar xvf  $TIMS_DIR/hapi/TimsUI.tar
