@@ -11,6 +11,7 @@ cd $TIMS_DIR/hapi
 # DOWNLOAD the static content from TimsUI, put in $TIMS_DIR/static-files
 if [[ ! -f TimsUI.tar ]] ; then
     wget -q https://github.com/HOT-Ecosystem/TimsUI/releases/download/Jan_Connectathon/TimsUI_Jan_Connectathon.tar 2> /dev/null
+    mv TimsUI_Jan_Connectathon.tar TimsUI.tar
     mkdir $TIMS_DIR/static-files
     cd $TIMS_DIR/static-files
     tar xvf  $TIMS_DIR/hapi/TimsUI.tar
@@ -63,7 +64,7 @@ fi
 #fi
 # Edit application.yaml to point to $TIMS_DIR/static-files, and copy at the same time
 cd $TIMS_DIR
-cat $TIMS_DIR/hapi/application_pg.yaml | sed  "s|XXstatic-filesXX|$TIMS_DIR/static-files/|g" >> $TIMS_DIR/hapi/application.yaml
+cat $TIMS_DIR/hapi/application_pg.yaml | sed  "s|XXstatic-filesXX|$TIMS_DIR/static-files/|g" > $TIMS_DIR/hapi/application.yaml
 
 cd $TIMS_DIR/hapi
 

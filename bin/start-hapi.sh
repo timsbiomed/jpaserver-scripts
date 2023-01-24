@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
-env | grep PG_ 
+env | grep PG 
 if (( $? )) ; then
-    echo "ERROR:missing PG_* environment variables used in the applicaiton.yaml"
-    echo "These are distinct from the PG variables postgres uses that do not have underscores."
+    echo "ERROR:missing PG* environment variables used in the application.yaml"
     exit 1
+fi
+
+psql -lqt | awk '{ print $1 }' | grep  $PGDATABASE
+if (( $? )) ; then
+    echo "INFO: databse \"$PGDATABASE\" does not exist, creating."
+    createdb $PGDATABASE
+else
+    echo "INFO: found databse \"$PGDATABASE\"."
 fi
 
 # RUN

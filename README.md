@@ -62,16 +62,20 @@ The defaults are set up to run against a postgres database on the localhost at p
 
 ## Install, start and load: 
   - set environment variables for the database (PG* in the case of postgres) and the URL for htting the server (HAPI_R4)
-    - `$ source profile.sh`
+    - `$ source bin/profile.sh`
   - fetch the HAPI CLI,  a `ROOT.war` of the server, the aehrc fhir-owl converter and the TimsUI content
     - `$ bin/install.sh`
   - start the server
-    - `$ config/start-hapi.sh`
+    - `$ bin/start-hapi.sh`
   - load the vocabularies
     - `$ bin/loaders.sh`
   - test with the Jupyter notebooks available at https://github.com/HOT-Ecosystem/TSDemoBoard
     - assuming defaults, the `BASE_URL` there should be set in accord with values here, `BASE_URL =\"http://localhost:8001/fhir/"`
   - test also with the TimsUI, installed as part of this installation, accessable at http://<server>:8001/static/index.html
+  - track server's progress by following the log
+    - `tail -f hapi.log`
+  - When necessary, stop with script that will stop all hapi servers on this server.
+    - `$ bin/stop-hapi.sh`
 
 ### Running things manually
 This project is set up to run things automatically. However, it is possible to run some things manually, which may be useful for troubleshooting.
