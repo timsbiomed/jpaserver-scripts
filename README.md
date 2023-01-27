@@ -1,6 +1,6 @@
 # jpaserver-scripts (public)
 Scripts to install, configure and start the hapi-fhir-jpaserver-starter.
-Initial by Shehim Essaid, mods by Chris Roeder
+Initial by Shahim Essaid, mods by Chris Roeder
 - assumes a companion repo, ontology_cache is in the same directory as this repo.
 
 ## Quick Install, see section below: "Install, start and load"
